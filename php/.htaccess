@@ -1,4 +1,4 @@
-# Cours du jour — configuration Apache (IONOS, OVH, o2switch…)
+# Cours du jour : configuration Apache (IONOS, OVH, o2switch…)
 # (Pas de directive « Options » : refusée par certains hébergeurs, dont IONOS → erreur 500)
 DirectoryIndex index.php
 

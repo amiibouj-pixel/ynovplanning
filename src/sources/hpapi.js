@@ -1,13 +1,7 @@
 'use strict';
 
-/**
- * Connecteur API HyperPlanning (Service Web REST, authentification par clé API).
- *
- * Index Education ne publie pas la documentation REST en accès libre : l'URL exacte de la
- * ressource "cours" et le mode d'authentification sont à confirmer avec l'administrateur
- * HyperPlanning de l'école. Tout est donc paramétrable dans le back-office, et la lecture
- * de la réponse JSON est tolérante (noms de champs français/anglais courants).
- */
+// Connecteur pour une API JSON "maison" : tout est réglable dans l'admin (URL, auth, chemin des cours)
+// parce que je n'ai pas trouvé de doc publique. La lecture des champs est volontairement permissive.
 
 const TIMEOUT_MS = 20000;
 const MAX_BYTES = 10 * 1024 * 1024;

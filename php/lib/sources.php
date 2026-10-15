@@ -1,11 +1,6 @@
 <?php
-/**
- * Sources de données (format commun : uid, summary, description, location, start, end en timestamps, status).
- * - API REST officielle HyperPlanning / PRONOTE Campus (Basic auth, .../hpsw/api/v1/)
- * - Autre API JSON (paramétrable)
- * - Exports iCal (repli)
- * - Démonstration
- */
+// Toutes les sources renvoient le même format : uid, summary, description, location, start, end, status
+// (API REST officielle, API JSON générique, iCal, démo)
 declare(strict_types=1);
 
 function today_ymd(): string

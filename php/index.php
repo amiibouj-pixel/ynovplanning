@@ -1,9 +1,5 @@
 <?php
-/**
- * Point d'entrée unique (version PHP, hébergement mutualisé).
- * Les fichiers statiques (display/, assets/, admin/static/) sont servis directement par Apache ;
- * tout le reste arrive ici via .htaccess.
- */
+// Point d'entrée de la version PHP. Apache sert les fichiers statiques, le reste passe ici (.htaccess)
 declare(strict_types=1);
 
 require __DIR__ . '/lib/bootstrap.php';

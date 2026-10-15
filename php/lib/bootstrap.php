@@ -1,8 +1,5 @@
 <?php
-/**
- * Version PHP du serveur (hébergement mutualisé IONOS, OVH... sans Node.js).
- * Même fonctionnement que server.js : écrans publics en lecture seule + back-office protégé.
- */
+// Version PHP pour les hébergements sans Node (IONOS...). Même fonctionnement que server.js
 declare(strict_types=1);
 
 if (PHP_VERSION_ID < 80000) {

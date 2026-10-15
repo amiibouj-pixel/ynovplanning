@@ -1,17 +1,9 @@
 'use strict';
 
-/**
- * Connecteur officiel : API REST PRONOTE Campus / HYPERPLANNING (Index Education).
- * Spécification : https://www.index-education.com/FichiersExternes/campus/2026/fr/OpenAPIRestPC.yaml
- *
- * - Base : https://<serveur>/hpsw/api/v1/
- * - Authentification : HTTP Basic (utilisateur "Service Web" + mot de passe / clé)
- * - Séances du jour : GET cours/detail_seances_placees?date_debut=AAAA-MM-JJ&date_fin=AAAA-MM-JJ
- *   -> renvoie des CLÉS (matière, salles, promotions...) qu'on traduit en noms via les référentiels.
- * - Durée exprimée en jours (0.125 = 3 h). jour_heure_debut sans fuseau = heure locale de l'établissement.
- * - Pas de notification de modification côté HyperPlanning : on interroge régulièrement
- *   et la détection des changements se fait dans schedule.js.
- */
+// API REST officielle HyperPlanning (.../hpsw/api/v1/), auth Basic.
+// Spec : https://www.index-education.com/FichiersExternes/campus/2026/fr/OpenAPIRestPC.yaml
+// Les séances renvoient des clés (matière, salles...) qu'il faut traduire avec les référentiels.
+// Attention : la durée est en jours (0.125 = 3h).
 
 const TIMEOUT_MS = 20000;
 const REF_TTL_MS = 60 * 60 * 1000; // référentiels (matières, salles...) rechargés toutes les heures

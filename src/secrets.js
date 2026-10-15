@@ -1,10 +1,6 @@
 'use strict';
 
-/**
- * Chiffrement des secrets stockés sur disque (clé API HyperPlanning) en AES-256-GCM.
- * La clé de chiffrement vient de SECRETS_KEY (ou à défaut SESSION_SECRET) : sans elle,
- * le fichier data/settings.json ne permet pas de retrouver la clé API.
- */
+// Chiffre la clé API sur le disque (AES-256-GCM). Clé = SECRETS_KEY, sinon SESSION_SECRET.
 const crypto = require('crypto');
 const config = require('./config');
 

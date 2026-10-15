@@ -1,9 +1,6 @@
 <?php
-/**
- * Synchronisation sans processus permanent (hébergement mutualisé) :
- * à chaque appel d'un écran, si le cache a plus de "refreshMinutes", on relit HyperPlanning
- * (un seul rafraîchissement à la fois grâce à un verrou fichier). Port de src/schedule.js.
- */
+// Pas de process qui tourne en continu sur un mutualisé : on resynchronise quand un écran appelle
+// et que le cache est trop vieux (avec un verrou pour ne pas lancer 10 synchros en même temps)
 declare(strict_types=1);
 
 function state_file(): string

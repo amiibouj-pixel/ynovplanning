@@ -1,9 +1,6 @@
 'use strict';
 
-/**
- * Transforme les données brutes HyperPlanning (événements iCal) en "cours" propres
- * pour l'affichage : niveau (B1...M2/BTS), filière, couleur officielle Ynov, salle, etc.
- */
+// Transforme les events HyperPlanning en cours affichables (niveau, filière, couleur, salle...)
 
 // Code couleur des filières = tokens officiels de ynov.com (--c-formation-*),
 // recoupés avec les carrés de couleur des écrans actuels (CREADD vert, MKTCD orange, AVI jaune...).

@@ -1,9 +1,6 @@
 'use strict';
 
-/**
- * Jeu de données de démonstration (repris des écrans actuels du campus de Montpellier),
- * au format brut iCal HyperPlanning, pour tester l'affichage sans accès à l'API.
- */
+// Données de démo (recopiées des écrans actuels de Montpellier) pour tester sans l'API
 
 const P = 'Montpellier | ';
 

@@ -1,0 +1,15 @@
+# docker compose up -d   (remplir .env avant : voir .env.example)
+services:
+  cours-du-jour:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+      TRUST_PROXY: "1"
+    ports:
+      - "127.0.0.1:3000:3000"   # accessible seulement via le reverse proxy du serveur
+    volumes:
+      - cours-du-jour-data:/data   # réglages + clé API chiffrée (survit aux mises à jour)
+volumes:
+  cours-du-jour-data:

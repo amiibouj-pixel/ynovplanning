@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Cours du jour | Ynov Campus</title>
+  <link rel="preload" href="/assets/fonts/lt-superior/LTSuperior-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="/assets/fonts/source-serif-4-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/display/display.css?v=20">
+</head>
+<body>
+  <div id="stage" class="stage">
+    <header class="head">
+      <img class="logo" src="/assets/logo-ynov.png" alt="Ynov">
+      <nav class="levels" id="levels" aria-label="Niveaux"></nav>
+      <span class="time" id="time">--:--</span>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="kicker" id="kicker">Cours du jour</p>
+        <h1 class="title" id="level-title">Planning</h1>
+      </div>
+      <div class="hero-side">
+        <div class="legend" id="legend"></div>
+        <span class="part" id="part"></span>
+        <div class="timer"><div id="timer"></div></div>
+      </div>
+    </section>
+
+    <main class="board" id="board"></main>
+
+    <footer class="foot">
+      <div class="notice" id="notice"><span id="notice-text"></span></div>
+      <span class="sync" id="sync"></span>
+    </footer>
+  </div>
+  <script src="/display/display.js?v=20"></script>
+</body>
+</html>

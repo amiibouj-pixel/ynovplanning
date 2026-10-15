@@ -1,0 +1,187 @@
+/* Cours du jour, écran TV, DA ynov.com
+   Repris du site : fond menthe #eaf0eb, header noir + filet arc-en-ciel 1px, titres serif,
+   pastilles blanches à liseré dégradé selon l'univers (Tech / Création / Archi),
+   boutons-pilules noirs, carrés noirs arrondis.
+   Navigateurs TV anciens : pas de CSS Grid, pas de "gap" flex. */
+
+/* LT Superior : police du site ynov.com (LyonsType, SIL OFL 1.1, voir assets/fonts/lt-superior/OFL.txt) */
+@font-face { font-family: 'LT Superior'; font-weight: 500; src: url('/assets/fonts/lt-superior/LTSuperior-Medium.ttf') format('truetype'); }
+@font-face { font-family: 'LT Superior'; font-weight: 600; src: url('/assets/fonts/lt-superior/LTSuperior-SemiBold.ttf') format('truetype'); }
+@font-face { font-family: 'LT Superior'; font-weight: 700; src: url('/assets/fonts/lt-superior/LTSuperior-Bold.ttf') format('truetype'); }
+/* LT Superior Serif (titres du site) : déposer LTSuperiorSerif-Medium.ttf ici pour l'utiliser ; sinon Source Serif 4 */
+@font-face { font-family: 'LT Superior Serif'; font-weight: 500; src: url('/assets/fonts/lt-superior/LTSuperiorSerif-Medium.ttf') format('truetype'); }
+@font-face { font-family: 'Source Serif 4'; font-weight: 500; src: url('/assets/fonts/source-serif-4-latin-500-normal.woff2') format('woff2'); }
+
+:root {
+  /* Tokens ynov.com */
+  --c-dark: #0a0006;
+  --c-light: #eaf0eb;
+  --c-text: #1d1d1d;
+  --c-muted: #696969;
+  --c-line: #bdc0bd;
+  --c-alert: #c20000;
+  --c-yellow: #eeff57;
+  --gradient-nav-border: linear-gradient(90deg, #ff1a1a 4.47%, #ff84ef 16.01%, #65eaaf 47.39%, #00eaff 61.29%, #859cff 78.19%, #4a8cff 87.11%, #018e4d 95.87%);
+  --gradient-tech: linear-gradient(92deg, #eeff57 0%, #5affb6 35%, #00eaff 76%, #859cff 100%);
+  --gradient-creative: linear-gradient(92deg, #ff1a1a 16%, #ff84ef 63%, #eeff57 96%);
+  --gradient-archi: linear-gradient(92deg, #859cff 0%, #4a8cff 43%, #018e4d 100%);
+  --gradient-corpo: linear-gradient(92deg, #ff1a1a 4%, #ff84ef 16%, #eeff57 30%, #5affb6 47%, #00eaff 61%, #859cff 78%, #4a8cff 87%, #018e4d 96%);
+  --sans: 'LT Superior', 'Helvetica Neue', Arial, sans-serif;
+  --serif: 'LT Superior Serif', 'Source Serif 4', Georgia, serif;
+
+  --bg: var(--c-light);
+  --fg: var(--c-dark);
+  --sub: var(--c-muted);
+  --rule: var(--c-line);
+}
+.dark {
+  --bg: #0a0006;
+  --fg: #ffffff;
+  --sub: #a9a3a8;
+  --rule: #2f272d;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-smoothing: antialiased; }
+
+.stage {
+  position: absolute; top: 0; left: 0; width: 1920px; height: 1080px;
+  background: var(--bg); overflow: hidden;
+  -webkit-transform-origin: 0 0; transform-origin: 0 0;
+}
+.stage.portrait { width: 1080px; height: 1920px; }
+
+/* ---------- Header noir (comme la nav du site) ---------- */
+.head {
+  position: relative; height: 120px; background: var(--c-dark); color: #fff; padding: 0 64px;
+  display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
+}
+.head:after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--gradient-nav-border); }
+.logo { height: 64px; mix-blend-mode: lighten; -webkit-flex: none; flex: none; }
+.levels { -webkit-flex: 1; flex: 1; margin-left: 56px; white-space: nowrap; }
+.lv {
+  display: inline-block; vertical-align: middle; margin-right: 10px;
+  font-size: 26px; font-weight: 500; color: #fff; padding: 12px 26px; border-radius: 100px;
+  border: 1px solid transparent;
+}
+.lv.on { background: #fff; color: var(--c-dark); font-weight: 600; }
+.lv-short { display: none; }
+.time { font-size: 54px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -1px; -webkit-flex: none; flex: none; }
+
+/* ---------- Hero (titre serif comme "L'école des transformations digitales") ---------- */
+.hero {
+  height: 190px; margin: 0 64px; border-bottom: 1px solid var(--rule);
+  display: -webkit-flex; display: flex; -webkit-align-items: flex-end; align-items: flex-end;
+  -webkit-justify-content: space-between; justify-content: space-between; padding-bottom: 22px;
+}
+.kicker { font-family: var(--serif); font-weight: 500; font-size: 30px; color: var(--sub); }
+.title { font-family: var(--serif); font-weight: 500; font-size: 92px; line-height: 1; margin-top: 6px; letter-spacing: -1px; }
+.hero-side { text-align: right; padding-bottom: 8px; max-width: 1000px; }
+/* Légende des filières présentes sur la page */
+.legend { white-space: normal; line-height: 1; }
+.key { display: inline-block; margin: 0 0 10px 20px; font-size: 19px; font-weight: 500; white-space: nowrap; }
+.key i { display: inline-block; width: 18px; height: 18px; border-radius: 50%; margin-right: 9px; vertical-align: -2px; }
+.part { display: inline-block; font-size: 22px; font-weight: 500; border: 1px solid var(--fg); border-radius: 100px; padding: 8px 20px; }
+.part:empty { display: none; }
+.timer { width: 220px; height: 3px; background: var(--rule); margin-top: 16px; margin-left: auto; border-radius: 2px; overflow: hidden; }
+.timer div { height: 100%; width: 0; background: var(--fg); }
+
+/* ---------- Lignes ---------- */
+.board { position: absolute; left: 64px; right: 64px; top: 312px; bottom: 76px; overflow: hidden; }
+.board.out { opacity: 0; -webkit-transition: opacity .3s; transition: opacity .3s; }
+.board.in { -webkit-animation: show .45s ease both; animation: show .45s ease both; }
+@-webkit-keyframes show { from { opacity: 0; -webkit-transform: translateY(10px); } to { opacity: 1; -webkit-transform: none; } }
+@keyframes show { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+.row { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; border-bottom: 1px solid var(--rule); }
+.c-class { width: 560px; -webkit-flex: none; flex: none; padding-right: 32px; }
+.c-course { -webkit-flex: 1; flex: 1; min-width: 0; padding-right: 32px; }
+.c-time { width: 250px; -webkit-flex: none; flex: none; }
+.c-room { width: 250px; -webkit-flex: none; flex: none; }
+
+/* Pastille de classe : forme des pilules ynov.com, remplie avec la couleur officielle de la filière */
+.pill {
+  display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center;
+  max-width: 100%; height: 86px; padding: 0 38px 0 10px; border-radius: 100px; background: #dbdbdb; color: var(--c-dark);
+}
+.pill .lvl {
+  -webkit-flex: none; flex: none; width: 66px; height: 66px; border-radius: 50%; background: var(--c-dark); color: #fff;
+  font-size: 25px; font-weight: 700; line-height: 66px; text-align: center; margin-right: 18px;
+}
+.pill .lvl.wide { width: auto; padding: 0 14px; border-radius: 28px; }
+.pill .prog { font-size: 40px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .2px; }
+.also { font-size: 19px; font-weight: 500; color: var(--sub); margin: 8px 0 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.subject { font-size: 32px; font-weight: 600; line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.teacher { font-size: 23px; font-weight: 500; color: var(--sub); margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tag { display: inline-block; vertical-align: 5px; margin-left: 12px; font-size: 17px; font-weight: 600; padding: 4px 14px; border-radius: 100px; background: var(--c-yellow); color: var(--c-dark); }
+
+.hours { font-size: 36px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.state { display: inline-block; margin-top: 10px; font-size: 18px; font-weight: 600; padding: 5px 16px; border-radius: 100px; border: 1px solid var(--fg); white-space: nowrap; }
+.state.live { background: var(--fg); color: var(--bg); }
+
+/* Salle : carré noir arrondi, comme les pictos du site */
+.room {
+  width: 250px; height: 104px; border-radius: 24px; background: var(--c-dark); color: #fff;
+  display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column;
+  -webkit-justify-content: center; justify-content: center; padding: 0 22px; overflow: hidden;
+}
+.dark .room { background: #fff; color: var(--c-dark); }
+.room small { font-size: 17px; font-weight: 500; opacity: .6; }
+.room b { font-size: 54px; font-weight: 700; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.room b.long { font-size: 25px; line-height: 1.1; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.room small + b.long { margin-top: 2px; }
+.room.note { background: transparent; color: var(--fg); border: 1px solid var(--fg); }
+.room.note b { font-size: 26px; }
+.room.cancel { background: var(--c-alert); color: #fff; border: 0; }
+
+.cancelled .pill, .cancelled .subject, .cancelled .teacher, .cancelled .hours { opacity: .4; }
+.cancelled .subject { text-decoration: line-through; }
+
+.empty { padding-top: 160px; }
+.empty h2 { font-family: var(--serif); font-weight: 500; font-size: 72px; }
+.empty p { font-size: 30px; font-weight: 500; color: var(--sub); margin-top: 18px; }
+
+/* ---------- Footer noir (comme la barre basse du site) ---------- */
+.foot {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 76px; background: var(--c-dark); color: #fff; padding: 0 64px;
+  display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
+}
+.foot:before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--gradient-nav-border); }
+.notice { -webkit-flex: 1; flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; font-size: 26px; font-weight: 500; margin-right: 32px; }
+.notice.alert span { background: var(--c-alert); padding: 6px 18px; border-radius: 100px; }
+.notice.scroll span { display: inline-block; padding-left: 100%; -webkit-animation: marquee linear infinite; animation: marquee linear infinite; }
+@-webkit-keyframes marquee { to { -webkit-transform: translateX(-100%); } }
+@keyframes marquee { to { transform: translateX(-100%); } }
+.sync { -webkit-flex: none; flex: none; font-size: 19px; font-weight: 500; border: 1px solid rgba(255,255,255,.6); border-radius: 100px; padding: 8px 20px; }
+.sync:empty { display: none; }
+.sync.stale { border-color: #ff8a8a; color: #ff8a8a; }
+
+/* ---------- Écran vertical ---------- */
+.portrait .head { height: 110px; padding: 0 36px; }
+.portrait .logo { height: 50px; }
+.portrait .levels { margin-left: 24px; }
+.portrait .lv { font-size: 24px; padding: 10px 18px; margin-right: 4px; }
+.portrait .lv-long { display: none; }
+.portrait .lv-short { display: inline; }
+.portrait .time { font-size: 44px; }
+.portrait .hero { margin: 0 36px; height: 150px; }
+.portrait .kicker { font-size: 26px; }
+.portrait .title { font-size: 60px; }
+.portrait .board { left: 36px; right: 36px; top: 260px; }
+.portrait .c-class { width: 400px; padding-right: 20px; }
+.portrait .c-time { display: none; }
+.portrait .c-room { width: 170px; }
+.portrait .room { width: 170px; height: 80px; padding: 0 18px; }
+.portrait .room b { font-size: 34px; }
+.portrait .room b.long { font-size: 20px; }
+.portrait .pill { height: 60px; }
+.portrait .pill .lvl { width: 46px; height: 46px; line-height: 46px; font-size: 19px; margin-right: 12px; }
+.portrait .legend { display: none; }
+.portrait .pill .prog { font-size: 26px; }
+.portrait .subject { font-size: 25px; }
+.portrait .teacher { font-size: 19px; }
+.portrait .inline-hours { display: block; font-size: 20px; font-weight: 600; margin-top: 6px; }
+.inline-hours { display: none; }
+.portrait .foot { padding: 0 36px; }

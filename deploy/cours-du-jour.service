@@ -1,0 +1,15 @@
+# Service systemd (sans Docker) : copier dans /etc/systemd/system/ puis
+#   sudo systemctl enable --now cours-du-jour
+[Unit]
+Description=Cours du jour - ecrans Ynov
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/cours-du-jour
+ExecStart=/usr/bin/node server.js
+Restart=always
+User=www-data
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

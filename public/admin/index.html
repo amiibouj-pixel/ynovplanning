@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Back-office | Planning Ynov</title>
+  <link rel="stylesheet" href="/admin/static/admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-in">
+      <div class="tb-brand">
+        <img src="/assets/logo-ynov.png" alt="Ynov">
+        <span>Écrans et planning</span>
+      </div>
+      <div class="tb-right">
+        <span class="muted-light" id="who"></span>
+        <button class="btn btn-ghost-light" id="logout" type="button">Déconnexion</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="overview" class="on">Accueil</button>
+      <button role="tab" data-tab="screens">Écrans</button>
+      <button role="tab" data-tab="sources">Connexion (avancé)</button>
+      <button role="tab" data-tab="display">Affichage</button>
+      <button role="tab" data-tab="announce">Annonce</button>
+    </nav>
+
+    <main>
+      <!-- Vue d'ensemble -->
+      <section class="panel on" data-panel="overview">
+        <div class="card quick">
+          <h2>1. Clé API HyperPlanning</h2>
+          <p class="muted" id="quickHelp">Collez la clé, cliquez sur Connecter : les écrans affichent tous les cours de l'école.</p>
+          <div class="quick-row">
+            <input id="quickKey" type="password" autocomplete="off" spellcheck="false" placeholder="Collez la clé API ici" aria-label="Clé API HyperPlanning">
+            <button class="btn btn-primary" id="quickConnect" type="button">Connecter</button>
+          </div>
+          <p class="quick-state" id="quickState"></p>
+        </div>
+        <div class="card quick">
+          <h2>2. Lien à mettre dans Emity</h2>
+          <p class="muted">Dans Emity : widget « Site web », plein écran, collez ce lien.</p>
+          <div class="quick-row">
+            <code id="quickUrl"></code>
+            <button class="btn" id="quickCopy" type="button">Copier</button>
+          </div>
+        </div>
+        <div class="cards-3">
+          <div class="card stat"><span class="stat-label">Cours aujourd'hui</span><span class="stat-value" id="st-count">0</span></div>
+          <div class="card stat"><span class="stat-label">Dernière synchro</span><span class="stat-value" id="st-sync">…</span></div>
+          <div class="card stat"><span class="stat-label">Source</span><span class="stat-value" id="st-source">…</span></div>
+        </div>
+        <div class="alert" id="st-errors" hidden></div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Aperçu en direct</h2>
+            <div>
+              <select id="preview-screen" aria-label="Écran à prévisualiser"></select>
+              <button class="btn" id="refresh-now" type="button">Synchroniser maintenant</button>
+            </div>
+          </div>
+          <div class="preview"><iframe id="preview" title="Aperçu de l'écran" loading="lazy"></iframe></div>
+        </div>
+      </section>
+
+      <!-- Écrans -->
+      <section class="panel" data-panel="screens">
+        <div class="card">
+          <div class="card-head">
+            <h2>Écrans</h2>
+            <button class="btn" id="add-screen" type="button">+ Ajouter un écran</button>
+          </div>
+          <p class="muted">Chaque écran a sa propre URL à coller dans Emity. Filtrez les niveaux pour, par exemple, n'afficher que les Masters à l'étage 3.</p>
+          <div id="screens"></div>
+        </div>
+      </section>
+
+      <!-- Sources -->
+      <section class="panel" data-panel="sources">
+        <div class="card">
+          <h2>Mode de données</h2>
+          <label class="switch"><input type="checkbox" id="demoMode"><span></span> Mode démonstration (données d'exemple)</label>
+          <p class="muted">À désactiver une fois la connexion HyperPlanning testée.</p>
+        </div>
+
+        <div class="card">
+          <h2>API HyperPlanning</h2>
+          <p class="muted">Les identifiants du Service Web sont chiffrés sur le serveur, jamais réaffichés ici et jamais envoyés aux écrans.
+            Le planning est relu toutes les 2 minutes : une modification faite dans HyperPlanning apparaît sur les écrans en 2 à 3 minutes.</p>
+          <label class="switch"><input type="checkbox" id="hpEnabled"><span></span> Utiliser l'API HyperPlanning</label>
+          <div class="grid-2">
+            <label>Type d'API
+              <select id="hpFlavor">
+                <option value="official">HyperPlanning / PRONOTE Campus (API REST officielle)</option>
+                <option value="generic">Autre API JSON (paramétrage avancé)</option>
+              </select>
+            </label>
+            <label>Adresse du Service Web
+              <input id="hpBaseUrl" maxlength="500" placeholder="https://hyperplanning.ecole.fr/hpsw/api/v1/" autocomplete="off">
+              <small class="hint" id="hpUrlHint">Se termine en général par /hpsw/api/v1/</small>
+            </label>
+            <label class="adv">Ressource des cours du jour
+              <input id="hpCoursesPath" maxlength="500" autocomplete="off">
+              <small class="hint">{date} = date du jour (AAAA-MM-JJ), {dateFR} = JJ/MM/AAAA</small>
+            </label>
+            <label id="hpUserWrap">Utilisateur du Service Web
+              <input id="hpUsername" maxlength="120" autocomplete="off">
+            </label>
+            <label>Mot de passe / clé API
+              <input id="hpApiKey" type="password" maxlength="1000" autocomplete="new-password" spellcheck="false">
+              <small class="hint" id="hpKeyState"></small>
+            </label>
+            <label class="adv">Envoi de la clé
+              <select id="hpAuthMode">
+                <option value="bearer">En-tête Authorization: Bearer</option>
+                <option value="header">En-tête personnalisé</option>
+                <option value="basic">Authentification Basic (identifiant + clé)</option>
+                <option value="query">Paramètre dans l'URL</option>
+              </select>
+            </label>
+            <label id="hpHeaderWrap" class="adv">Nom de l'en-tête / du paramètre
+              <input id="hpHeaderName" maxlength="60" autocomplete="off">
+            </label>
+          </div>
+          <div class="actions">
+            <button class="btn" id="hpTest" type="button">Tester la connexion</button>
+            <button class="btn btn-danger" id="hpClear" type="button">Supprimer la clé enregistrée</button>
+          </div>
+          <pre class="test-out" id="hpResult" hidden></pre>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Exports iCal (solution de repli)</h2>
+            <button class="btn" id="add-source" type="button">+ Ajouter une URL</button>
+          </div>
+          <p class="muted">Si l'API n'est pas disponible : dans HyperPlanning, emploi du temps d'une salle ou d'une promotion → icône iCal → copier l'URL. Ces URL restent sur le serveur.</p>
+          <div id="sources"></div>
+        </div>
+        <div class="card grid-2">
+          <label>Préfixe retiré des noms de promotion
+            <input id="groupPrefix" maxlength="60" placeholder="Montpellier |">
+          </label>
+          <label>Synchronisation toutes les (minutes)
+            <input id="refreshMinutes" type="number" min="1" max="120">
+          </label>
+        </div>
+      </section>
+
+      <!-- Affichage -->
+      <section class="panel" data-panel="display">
+        <div class="card grid-2">
+          <label>Nom du campus
+            <input id="campusName" maxlength="60">
+          </label>
+          <label>Thème
+            <select id="theme">
+              <option value="light">Fond menthe, comme ynov.com</option>
+              <option value="dark">Fond noir, pour les couloirs sombres</option>
+            </select>
+          </label>
+          <label>Cours par page
+            <input id="rowsPerPage" type="number" min="3" max="10">
+          </label>
+          <label>Durée d'une page (secondes)
+            <input id="pageSeconds" type="number" min="5" max="120">
+          </label>
+          <label>Badge « Modifié » visible pendant (heures, 0 = jamais)
+            <input id="modifiedBadgeHours" type="number" min="0" max="48">
+          </label>
+        </div>
+      </section>
+
+      <!-- Annonce -->
+      <section class="panel" data-panel="announce">
+        <div class="card">
+          <h2>Bandeau d'annonce</h2>
+          <label class="switch"><input type="checkbox" id="annEnabled"><span></span> Afficher l'annonce en bas des écrans</label>
+          <label>Message (280 caractères max.)
+            <textarea id="annText" maxlength="280" rows="3" placeholder="Ex. : Journée portes ouvertes samedi de 10h à 17h. Amphi fermé cet après-midi."></textarea>
+          </label>
+          <label>Ton
+            <select id="annTone">
+              <option value="info">Information</option>
+              <option value="alert">Alerte (rouge)</option>
+            </select>
+          </label>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="savebar" id="savebar" hidden>
+    <span>Modifications non enregistrées</span>
+    <div>
+      <button class="btn btn-ghost-light" id="discard" type="button">Annuler</button>
+      <button class="btn btn-primary" id="save" type="button">Enregistrer</button>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <template id="tpl-source">
+    <div class="list-row">
+      <input class="src-name" placeholder="Nom (ex. B1 Informatique)" maxlength="60">
+      <input class="src-url" placeholder="https://…/hp/ical/…ics" maxlength="2000">
+      <button class="btn btn-small src-test" type="button">Tester</button>
+      <button class="btn btn-small btn-danger src-del" type="button" aria-label="Supprimer">✕</button>
+      <span class="src-result muted"></span>
+    </div>
+  </template>
+
+  <template id="tpl-screen">
+    <div class="screen-row">
+      <div class="screen-main">
+        <input class="sc-name" placeholder="Nom de l'écran" maxlength="60">
+        <input class="sc-id" placeholder="identifiant-url" maxlength="40">
+        <button class="btn btn-small btn-danger sc-del" type="button" aria-label="Supprimer">✕</button>
+      </div>
+      <div class="sc-levels"></div>
+      <div class="sc-url">
+        <code></code>
+        <button class="btn btn-small sc-copy" type="button">Copier l'URL</button>
+        <a class="btn btn-small sc-open" target="_blank" rel="noopener">Ouvrir</a>
+      </div>
+    </div>
+  </template>
+
+  <script src="/admin/static/admin.js"></script>
+</body>
+</html>

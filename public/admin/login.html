@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Connexion | Planning Ynov</title>
+  <link rel="stylesheet" href="/admin/static/admin.css">
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <img class="login-logo" src="/assets/logo-ynov.png" alt="Ynov">
+    <h1>Back-office écrans</h1>
+    <p class="muted">Accès réservé à l'équipe pédagogique.</p>
+    <div class="alert" id="error" hidden></div>
+    <form method="post" action="/admin/login" autocomplete="on">
+      <label>Identifiant
+        <input name="username" autocomplete="username" required maxlength="80" autofocus>
+      </label>
+      <label>Mot de passe
+        <input name="password" type="password" autocomplete="current-password" required maxlength="200">
+      </label>
+      <button class="btn btn-primary btn-block" type="submit">Se connecter</button>
+    </form>
+  </main>
+  <script src="/admin/static/login.js"></script>
+</body>
+</html>

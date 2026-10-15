@@ -1,0 +1,11 @@
+node_modules/
+.env
+data/settings.json
+*.tmp
+.DS_Store
+
+# Version PHP
+dist/
+php/config.php
+php/data/*.json
+php/data/sessions/

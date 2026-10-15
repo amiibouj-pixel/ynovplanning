@@ -18,7 +18,7 @@ function buildUrl(cfg, apiKey, tz) {
   const path = (cfg.coursesPath || '')
     .replace(/\{date\}/g, `${y}-${m}-${d}`)
     .replace(/\{dateFR\}/g, `${d}/${m}/${y}`);
-  const url = new URL(path, cfg.baseUrl.replace(/\/?$/, '/'));
+  const url = new URL(cfg.baseUrl.replace(/\/+$/, '') + '/' + path.replace(/^\/+/, ''));
   if (cfg.authMode === 'query') url.searchParams.set(cfg.headerName || 'apikey', apiKey);
   return url;
 }

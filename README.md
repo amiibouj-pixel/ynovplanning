@@ -59,7 +59,7 @@ Le mot de passe du Service Web est chiffré (AES-256-GCM) et n'est jamais envoy�
 
 1. copier `php/config.sample.php` en `php/config.php` et le remplir (hash du mot de passe, clés)
 2. `npm run build:php` -> ça crée `dist/ionos/`
-3. envoyer tout le contenu de `dist/ionos/` sur un sous-domaine (PHP 8.2 minimum, SSL activé)
+3. envoyer tout le contenu de `dist/ionos/` sur un sous-domaine (PHP 8 minimum, SSL activé)
 4. vérifier que `/healthz` répond `{"ok":true}` et que `/config.php` est bien bloqué
 
 Pour une mise à jour : refaire le build et renvoyer les fichiers sans toucher au dossier `data/`.

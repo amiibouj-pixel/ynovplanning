@@ -20,7 +20,11 @@ const auth = require('./src/auth');
 const app = express();
 const PUB = path.join(__dirname, 'public');
 
-if (config.trustProxy) app.set('trust proxy', config.trustProxy === 'true' ? 1 : config.trustProxy);
+if (config.trustProxy) {
+  const tp = config.trustProxy;
+  // "1" = nombre de proxys devant le serveur (sinon Express le prend pour une IP)
+  app.set('trust proxy', tp === 'true' ? 1 : /^\d+$/.test(tp) ? Number(tp) : tp);
+}
 app.disable('x-powered-by');
 
 // --- headers de sécu (helmet + CSP) ---
@@ -54,7 +58,7 @@ app.use((req, res, next) => {
 
 // Les pages d'écran peuvent être intégrées en iframe par le lecteur d'affichage dynamique
 const displayCsp = helmet.contentSecurityPolicy({
-  directives: { ...baseCsp, frameAncestors: config.displayFrameAncestors },
+  directives: { ...baseCsp, frameAncestors: config.displayFrameAncestors.includes('*') ? ['*'] : ["'self'", ...config.displayFrameAncestors] },
 });
 
 app.use('/assets', express.static(path.join(PUB, 'assets'), { maxAge: '7d', immutable: true }));
@@ -198,7 +202,7 @@ api.post('/test-source', async (req, res) => {
     const u = new URL(url);
     if (!/^https?:$/.test(u.protocol)) throw new Error('URL http(s) attendue');
     const events = await fetchIcal(url);
-    res.json({ ok: true, count: events.length, sample: events.slice(0, 3).map((e) => ({ summary: e.summary, start: e.start })) });
+    res.json({ ok: true, count: events.length });
   } catch (e) {
     res.status(400).json({ ok: false, error: e.message });
   }
@@ -208,9 +212,15 @@ api.post('/test-source', async (req, res) => {
 // Si aucune nouvelle clé n'est saisie, on utilise la clé déjà enregistrée.
 api.post('/test-hpapi', async (req, res) => {
   const body = req.body || {};
-  const cfg = { ...store.load().hpApi, ...body };
-  const key = typeof body.apiKey === 'string' && body.apiKey.trim() ? body.apiKey.trim() : store.hpApiKey();
+  const saved = store.load().hpApi;
+  const allowed = ['flavor', 'baseUrl', 'coursesPath', 'authMode', 'headerName', 'username'];
+  const cfg = { ...saved };
+  allowed.forEach((k) => typeof body[k] === 'string' && (cfg[k] = body[k]));
+  const typed = typeof body.apiKey === 'string' ? body.apiKey.trim() : '';
   try {
+    // pas de nouvelle clé saisie : on n'envoie la clé enregistrée qu'à l'adresse enregistrée
+    if (!typed && cfg.baseUrl !== saved.baseUrl) throw new Error('Saisissez le mot de passe pour tester une autre adresse');
+    const key = typed || store.hpApiKey();
     const u = new URL(cfg.baseUrl);
     if (!/^https?:$/.test(u.protocol)) throw new Error('URL http(s) attendue');
     const { events, raw, operations, available } =
@@ -221,7 +231,7 @@ api.post('/test-hpapi', async (req, res) => {
           : await fetchHpOfficial(cfg, key, config.timezone, { forceRefs: true });
     res.json({
       ok: true,
-      received: raw.length,
+      received: raw[0] && raw[0].cours != null ? raw[0].cours : raw.length,
       understood: events.length,
       fields: raw[0] ? Object.keys(raw[0]).slice(0, 30) : [],
       sample: events.slice(0, 5).map((e) => ({

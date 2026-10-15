@@ -134,7 +134,8 @@ function http_get(string $url, array $headers = [], int $timeout = 20, bool $fol
 
 function security_headers(bool $display): void
 {
-    $frame = $display ? implode(' ', (array) cfg('display_frame_ancestors')) : "'none'";
+    $anc = (array) cfg('display_frame_ancestors');
+    $frame = $display ? (in_array('*', $anc, true) ? '*' : "'self' " . implode(' ', $anc)) : "'none'";
     header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
         . "font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors $frame");
     header('X-Content-Type-Options: nosniff');

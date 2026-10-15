@@ -173,4 +173,4 @@ function toCourse(ev, settings) {
   };
 }
 
-module.exports = { toCourse, parseGroup, formatTeacher, parseRooms, FILIERES };
+module.exports = { toCourse };

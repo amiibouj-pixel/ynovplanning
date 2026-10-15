@@ -47,6 +47,7 @@ if (!config.sessionSecret || config.sessionSecret.length < 32) {
 
 // Clé de chiffrement des secrets stockés (clé API HyperPlanning). À ne jamais changer une fois en production.
 config.secretsKey = env.SECRETS_KEY || config.sessionSecret;
+if (!env.SECRETS_KEY) console.warn('[config] SECRETS_KEY absent : la clé API enregistrée sera illisible si SESSION_SECRET change.');
 // Optionnel : clé API fournie par variable d'environnement (prioritaire sur celle saisie dans l'admin)
 config.hpApiKeyEnv = env.HP_API_KEY || '';
 

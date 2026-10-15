@@ -35,7 +35,7 @@ copy('public/admin/static', 'admin/static');
 copy('public/admin/index.html', 'lib/views/admin.html');
 copy('public/admin/login.html', 'lib/views/login.html');
 
-// Config locale (si présente) : jamais écrasée côté serveur, mais pratique pour un premier envoi
+// config.php local copié s'il existe (pratique pour le premier envoi, ensuite il écrase celui du serveur)
 if (fs.existsSync(path.join(ROOT, 'php', 'config.php'))) copy('php/config.php', 'config.php');
 
 let count = 0;

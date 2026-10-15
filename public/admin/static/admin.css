@@ -2,7 +2,6 @@
 @font-face { font-family: 'LT Superior'; font-weight: 500; font-display: swap; src: url('/assets/fonts/lt-superior/LTSuperior-Medium.ttf') format('truetype'); }
 @font-face { font-family: 'LT Superior'; font-weight: 600; font-display: swap; src: url('/assets/fonts/lt-superior/LTSuperior-SemiBold.ttf') format('truetype'); }
 @font-face { font-family: 'LT Superior'; font-weight: 700; font-display: swap; src: url('/assets/fonts/lt-superior/LTSuperior-Bold.ttf') format('truetype'); }
-@font-face { font-family: 'LT Superior Serif'; font-weight: 500; font-display: swap; src: url('/assets/fonts/lt-superior/LTSuperiorSerif-Medium.ttf') format('truetype'); }
 @font-face { font-family: 'Ynov Serif'; font-weight: 500; font-display: swap; src: url('/assets/fonts/source-serif-4-latin-500-normal.woff2') format('woff2'); }
 
 :root {
@@ -22,7 +21,7 @@
   --shadow: 0 24px 48px -28px rgba(24, 40, 30, .35), 0 2px 8px rgba(24, 40, 30, .05);
   --rainbow: linear-gradient(90deg, #ff1a1a 4.47%, #ff84ef 16.01%, #65eaaf 47.39%, #00eaff 61.29%, #859cff 78.19%, #4a8cff 87.11%, #018e4d 95.87%);
   --sans: 'LT Superior', -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  --serif: 'LT Superior Serif', 'Ynov Serif', Georgia, serif;
+  --serif: 'Ynov Serif', Georgia, serif;
   --ease: cubic-bezier(.2, .8, .2, 1);
 }
 

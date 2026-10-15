@@ -165,4 +165,4 @@ function hpApiKey() {
   return config.hpApiKeyEnv || secrets.decrypt(load().hpApi.apiKeyEnc);
 }
 
-module.exports = { load, save, publicSettings, hpApiKey, LEVELS };
+module.exports = { load, save, publicSettings, hpApiKey };

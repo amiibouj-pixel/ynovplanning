@@ -282,8 +282,9 @@ function soapTime(v) {
   const s = list(v)[0];
   if (s == null || s === '') return null;
   if (/^\d+(\.\d+)?$/.test(s) && Number(s) > 10000) {
-    const base = new Date(1899, 11, 30).getTime(); // TDateTime : jours depuis le 30/12/1899, heure locale
-    return new Date(base + Math.round(Number(s) * 86400000));
+    // TDateTime = jours depuis le 30/12/1899. On calcule en UTC puis on relit comme une heure locale.
+    const u = new Date(Date.UTC(1899, 11, 30) + Math.round(Number(s) * 1440) * 60000);
+    return new Date(u.getUTCFullYear(), u.getUTCMonth(), u.getUTCDate(), u.getUTCHours(), u.getUTCMinutes());
   }
   const fr = /^(\d{2})\/(\d{2})\/(\d{4})(?:[ T](\d{1,2})[:h](\d{2}))?/.exec(s);
   if (fr) return new Date(Number(fr[3]), Number(fr[2]) - 1, Number(fr[1]), Number(fr[4] || 0), Number(fr[5] || 0));

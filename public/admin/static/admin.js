@@ -116,6 +116,7 @@
   }
 
   function markDirty() {
+    if (!saved) return; // réglages pas encore chargés
     readForm();
     $('#savebar').hidden = JSON.stringify(draft) === JSON.stringify(saved);
   }

@@ -126,6 +126,11 @@ async function refresh() {
       delete c.uid;
     }
 
+    // on oublie les cours qui ne sont plus dans le planning (sinon les maps grossissent tous les jours)
+    const ids = new Set(courses.map((c) => c.id));
+    for (const id of [...state.fingerprints.keys()]) if (!ids.has(id)) state.fingerprints.delete(id);
+    for (const id of [...state.modifiedAt.keys()]) if (!ids.has(id)) state.modifiedAt.delete(id);
+
     courses.sort((a, b) => a.start.localeCompare(b.start) || a.end.localeCompare(b.end));
     state.courses = courses;
     state.lastSuccessAt = state.lastFetchAt;
@@ -168,8 +173,9 @@ function forScreen(screen) {
   const now = Date.now();
 
   const courses = state.courses
-    .filter((c) => !c.groups.length || c.groups.some((g) => !g.level || levels.has(g.level)))
-    .map((c) => {
+    .map((c) => ({ ...c, groups: c.groups.filter((g) => !g.level || levels.has(g.level)), _all: c.groups.length }))
+    .filter((c) => !c._all || c.groups.length)
+    .map(({ _all, ...c }) => {
       const m = state.modifiedAt.get(c.id);
       return { ...c, modified: !!m && ttl > 0 && now - m < ttl };
     });

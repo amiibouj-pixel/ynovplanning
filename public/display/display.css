@@ -6,8 +6,6 @@
 @font-face { font-family: 'LT Superior'; font-weight: 500; src: url('/assets/fonts/lt-superior/LTSuperior-Medium.ttf') format('truetype'); }
 @font-face { font-family: 'LT Superior'; font-weight: 600; src: url('/assets/fonts/lt-superior/LTSuperior-SemiBold.ttf') format('truetype'); }
 @font-face { font-family: 'LT Superior'; font-weight: 700; src: url('/assets/fonts/lt-superior/LTSuperior-Bold.ttf') format('truetype'); }
-/* LT Superior Serif (titres du site) : déposer LTSuperiorSerif-Medium.ttf ici pour l'utiliser ; sinon Source Serif 4 */
-@font-face { font-family: 'LT Superior Serif'; font-weight: 500; src: url('/assets/fonts/lt-superior/LTSuperiorSerif-Medium.ttf') format('truetype'); }
 @font-face { font-family: 'Source Serif 4'; font-weight: 500; src: url('/assets/fonts/source-serif-4-latin-500-normal.woff2') format('woff2'); }
 @font-face { font-family: 'Source Serif 4'; font-weight: 600; src: url('/assets/fonts/source-serif-4-latin-600-normal.woff2') format('woff2'); }
 
@@ -20,7 +18,7 @@
   --c-live: #12b76a;
   --gradient-nav-border: linear-gradient(90deg, #ff1a1a 4.47%, #ff84ef 16.01%, #65eaaf 47.39%, #00eaff 61.29%, #859cff 78.19%, #4a8cff 87.11%, #018e4d 95.87%);
   --sans: 'LT Superior', 'Helvetica Neue', Arial, sans-serif;
-  --serif: 'LT Superior Serif', 'Source Serif 4', Georgia, serif;
+  --serif: 'Source Serif 4', Georgia, serif;
 
   --bg: var(--c-light);
   --fg: var(--c-dark);

@@ -192,14 +192,10 @@ function for_screen(array $screen): array
     $now = now_ms();
     $courses = [];
     foreach ($state['courses'] as $c) {
-        $match = !$c['groups'];
-        foreach ($c['groups'] as $g) {
-            if (!$g['level'] || isset($levels[$g['level']])) {
-                $match = true;
-                break;
-            }
-        }
-        if (!$match) {
+        // on ne garde que les classes des niveaux de cet écran
+        $all = count($c['groups']);
+        $c['groups'] = array_values(array_filter($c['groups'], fn($g) => !$g['level'] || isset($levels[$g['level']])));
+        if ($all && !$c['groups']) {
             continue;
         }
         $m = $state['modifiedAt'][$c['id']] ?? null;

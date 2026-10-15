@@ -22,7 +22,8 @@ async function fetchIcal(url) {
     if (text.length > MAX_BYTES) throw new Error('Fichier iCal trop volumineux');
     if (!/BEGIN:VCALENDAR/.test(text)) throw new Error("La réponse n'est pas un calendrier iCal");
     const data = ical.sync.parseICS(text);
-    return Object.values(data).filter((e) => e && e.type === 'VEVENT' && e.start && e.end);
+    // on ignore les événements "journée entière" (fériés, fermetures)
+    return Object.values(data).filter((e) => e && e.type === 'VEVENT' && e.start && e.end && !e.start.dateOnly && e.datetype !== 'date');
   } finally {
     clearTimeout(timer);
   }

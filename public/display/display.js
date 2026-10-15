@@ -163,7 +163,7 @@
     if (c.cancelled) return '<div class="room cancel"><small>Cours</small><b>Annulé</b></div>';
     if (c.remote) return '<div class="room note"><small>Cours</small><b>À distance</b></div>';
     if (!c.rooms.length) return '<div class="room note"><small>Salle</small><b>À venir</b></div>';
-    var label = c.rooms.slice(0, 2).join(' et ');
+    var label = c.rooms.slice(0, 2).join(' et ') + (c.rooms.length > 2 ? ' +' + (c.rooms.length - 2) : '');
     return '<div class="room"><small>Salle</small><b' + (label.length > 5 ? ' class="long"' : '') + '>' + esc(label) + '</b></div>';
   }
 

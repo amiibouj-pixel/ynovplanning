@@ -361,8 +361,9 @@ function soap_time($v): ?int
     }
     $s = (string) $v;
     if (is_numeric($s) && (float) $s > 10000) {
-        $base = new DateTime('1899-12-30 00:00:00');
-        return $base->getTimestamp() + (int) round((float) $s * 86400);
+        // TDateTime = jours depuis le 30/12/1899, calculé en UTC puis relu comme une heure locale
+        $u = (new DateTime('1899-12-30', new DateTimeZone('UTC')))->modify('+' . (int) round((float) $s * 1440) . ' minutes');
+        return strtotime($u->format('Y-m-d H:i:s')) ?: null;
     }
     if (preg_match('#^(\d{2})/(\d{2})/(\d{4})(?:[ T](\d{1,2})[:h](\d{2}))?#', $s, $m)) {
         return strtotime(sprintf('%s-%s-%s %02d:%s:00', $m[3], $m[2], $m[1], (int) ($m[4] ?? 0), $m[5] ?? '00')) ?: null;

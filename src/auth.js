@@ -52,7 +52,7 @@ function ensureCsrf(req) {
 /** Protection CSRF : jeton de session exigé dans l'en-tête X-CSRF-Token pour toute écriture. */
 function requireCsrf(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
-  const token = req.get('X-CSRF-Token') || (req.body && req.body._csrf);
+  const token = req.get('X-CSRF-Token');
   if (token && req.session.csrf && safeEqual(token, req.session.csrf)) return next();
   return res.status(403).json({ error: 'Jeton CSRF invalide' });
 }

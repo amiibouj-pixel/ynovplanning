@@ -129,6 +129,9 @@ try {
                 if ($method === 'GET') {
                     json_out(settings_public());
                 }
+                if ($method !== 'POST' && $method !== 'PUT') {
+                    not_found();
+                }
                 $before = settings_load();
                 $saved = settings_save(body_json());
                 $changed = source_key($before) !== source_key($saved);
@@ -139,6 +142,9 @@ try {
                 json_out(schedule_status(state_load()));
 
             case '/admin/api/refresh':
+                if ($method !== 'POST') {
+                    not_found();
+                }
                 json_out(schedule_status(schedule_refresh(true)));
 
             case '/admin/api/test-source':
@@ -152,8 +158,13 @@ try {
             case '/admin/api/test-hpapi':
                 $b = body_json();
                 $cfgHp = array_merge(settings_load()['hpApi'], array_intersect_key($b, array_flip(['flavor', 'baseUrl', 'coursesPath', 'authMode', 'headerName', 'username'])));
-                $key = is_string($b['apiKey'] ?? null) && trim($b['apiKey']) !== '' ? trim($b['apiKey']) : hp_api_key();
+                $typed = is_string($b['apiKey'] ?? null) ? trim($b['apiKey']) : '';
+                $key = $typed !== '' ? $typed : hp_api_key();
                 try {
+                    // pas de nouvelle clé saisie : on n'envoie la clé enregistrée qu'à l'adresse enregistrée
+                    if ($typed === '' && ($cfgHp['baseUrl'] ?? '') !== settings_load()['hpApi']['baseUrl']) {
+                        throw new RuntimeException('Saisissez le mot de passe pour tester une autre adresse');
+                    }
                     if (!valid_url($cfgHp['baseUrl'] ?? '')) {
                         throw new RuntimeException('URL http(s) attendue');
                     }
@@ -167,7 +178,7 @@ try {
                             'classes' => implode(', ', $g[1]), 'annule' => $e['status'] === 'CANCELLED'];
                     }
                     $first = $r['raw'][0] ?? [];
-                    json_out(['ok' => true, 'received' => count($r['raw']), 'understood' => count($r['events']),
+                    json_out(['ok' => true, 'received' => $r['raw'][0]['cours'] ?? count($r['raw']), 'understood' => count($r['events']),
                         'fields' => is_array($first) ? array_slice(array_keys($first), 0, 30) : [], 'sample' => $sample,
                         'operations' => $r['operations'] ?? null, 'available' => isset($r['available']) ? array_slice($r['available'], 0, 200) : null]);
                 } catch (Throwable $e) {

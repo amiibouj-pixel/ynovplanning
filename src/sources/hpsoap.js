@@ -1,13 +1,6 @@
 'use strict';
 
-/**
- * Connecteur Service Web SOAP HYPERPLANNING (WSDL), même logique que php/lib/soap.php.
- *
- * - Adresse : celle du WSDL, en général https://<serveur>/hpsw/wsdl/RpcEncoded
- * - Authentification : HTTP Basic (utilisateur « Service Web » + mot de passe)
- * - Les opérations disponibles dépendent de la version d'HYPERPLANNING : pour chaque information, on prend
- *   la première opération du WSDL parmi des noms candidats (ROLES). Le test du back-office liste ce qui manque.
- */
+// Service Web SOAP HyperPlanning, même logique que php/lib/soap.php (voir les commentaires là-bas).
 
 const TIMEOUT_MS = 20000;
 const MAX_COURSES = 400;

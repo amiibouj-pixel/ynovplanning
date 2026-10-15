@@ -1,6 +1,4 @@
-/* Back-office — DA ynov.com en « liquid glass »
-   Fond menthe Ynov et halos de couleur de la marque, capsules et cartes de verre (flou + reflet),
-   boutons-pilules noirs, titres serif. Mêmes repères que l'écran TV. */
+/* Back-office - même charte que l'écran TV */
 @font-face { font-family: 'LT Superior'; font-weight: 500; font-display: swap; src: url('/assets/fonts/lt-superior/LTSuperior-Medium.ttf') format('truetype'); }
 @font-face { font-family: 'LT Superior'; font-weight: 600; font-display: swap; src: url('/assets/fonts/lt-superior/LTSuperior-SemiBold.ttf') format('truetype'); }
 @font-face { font-family: 'LT Superior'; font-weight: 700; font-display: swap; src: url('/assets/fonts/lt-superior/LTSuperior-Bold.ttf') format('truetype'); }

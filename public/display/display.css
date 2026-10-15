@@ -1,9 +1,6 @@
-/* Cours du jour, écran TV — DA ynov.com en « liquid glass »
-   Base Ynov : fond menthe #eaf0eb, noir #0a0006, pilules, titres serif, dégradés de la marque.
-   Couche verre (inspiration Apple / Airbnb) : capsules translucides flottantes, reflets en bordure,
-   cartes très arrondies à ombre douce, halos colorés en fond.
-   Navigateurs TV anciens : pas de CSS Grid ni de « gap » flex ; le flou réel (backdrop-filter)
-   n'est appliqué que s'il est supporté, et seulement sur l'en-tête et le pied (coût GPU). */
+/* Écran TV - charte ynov.com (menthe #eaf0eb, noir #0a0006, pilules, titres serif)
+   Pas de grid ni de gap flex : les navigateurs des TV sont vieux.
+   backdrop-filter seulement sur le header et le footer, sinon ça rame sur les players. */
 
 /* LT Superior : police du site ynov.com (LyonsType, SIL OFL 1.1, voir assets/fonts/lt-superior/OFL.txt) */
 @font-face { font-family: 'LT Superior'; font-weight: 500; src: url('/assets/fonts/lt-superior/LTSuperior-Medium.ttf') format('truetype'); }

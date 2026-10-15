@@ -1,15 +1,10 @@
 <?php
 /**
- * Connecteur Service Web SOAP HYPERPLANNING (le « Service Web » historique, décrit par un WSDL).
+ * Service Web SOAP HyperPlanning (WSDL type https://<serveur>/hpsw/wsdl/RpcEncoded), auth Basic.
+ * Pas besoin de l'extension soap, les enveloppes sont faites à la main.
  *
- * - Adresse : celle du WSDL, en général https://<serveur>/hpsw/wsdl/RpcEncoded
- * - Authentification : HTTP Basic (utilisateur « Service Web » + mot de passe)
- * - Aucune extension PHP « soap » requise : les enveloppes sont construites à la main (RPC/encoded ou literal).
- *
- * La liste exacte des opérations dépend de la version d'HYPERPLANNING. Le connecteur lit le WSDL et
- * cherche, pour chaque information (cours du jour, matière, salles, promotions…), la première opération
- * existante parmi des noms candidats (SOAP_ROLES). Le bouton « Tester » du back-office affiche les
- * opérations trouvées et celles qui manquent : il suffit alors d'ajouter le bon nom ici.
+ * Les noms d'opérations changent selon les versions d'HP, donc on prend le premier qui existe
+ * dans SOAP_ROLES. Si le test de l'admin affiche une opération manquante, ajouter son nom ici.
  */
 declare(strict_types=1);
 

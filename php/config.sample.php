@@ -1,6 +1,6 @@
 <?php
 /*
- * Configuration — copier ce fichier en config.php et le remplir.
+ * Configuration : copier ce fichier en config.php et le remplir.
  * config.php n'est jamais accessible depuis le web (bloqué par .htaccess).
  */
 return [

@@ -124,10 +124,13 @@
 
   /* ---------- API HyperPlanning ---------- */
   function updateAuthFields() {
-    var official = $('#hpFlavor').value === 'official';
+    var flavor = $('#hpFlavor').value;
+    var official = flavor !== 'generic'; // REST officielle et SOAP : authentification Basic, pas de réglages avancés
     var mode = official ? 'basic' : $('#hpAuthMode').value;
     $$('.adv').forEach(function (el) { el.hidden = official; });
     $('#hpUrlHint').hidden = !official;
+    $('#hpUrlHint').textContent = flavor === 'soap' ? 'Adresse du WSDL, en général …/hpsw/wsdl/RpcEncoded' : 'Se termine en général par /hpsw/api/v1/';
+    $('#hpBaseUrl').placeholder = flavor === 'soap' ? 'https://hyperplanning.ecole.fr/hpsw/wsdl/RpcEncoded' : 'https://hyperplanning.ecole.fr/hpsw/api/v1/';
     $('#hpHeaderWrap').hidden = official || (mode !== 'header' && mode !== 'query');
     $('#hpUserWrap').hidden = mode !== 'basic';
   }
@@ -158,7 +161,13 @@
               (c.classes ? ', ' + c.classes : '') + (c.salle ? '  (' + c.salle + ')' : '') + (c.annule ? '  [ANNULÉ]' : ''));
           });
         }
-        if (r.received && !r.understood) {
+        if (r.operations) {
+          var roles = { listRange: 'Cours du jour', start: 'Horaires', subject: 'Matière', rooms: 'Salles', promotions: 'Classes', teachers: 'Enseignants', cancelledRange: 'Cours annulés' };
+          lines.push('', 'Opérations SOAP utilisées :');
+          Object.keys(roles).forEach(function (k) { lines.push((r.operations[k] ? '  ✓ ' : '  ✗ ') + roles[k] + (r.operations[k] ? ' → ' + r.operations[k] : ' (introuvable)')); });
+          if (r.available) lines.push('', r.available.length + ' opération(s) dans le WSDL : ' + r.available.join(', '));
+        }
+        if (r.received && !r.understood && r.fields && r.fields.length) {
           lines.push('', 'Les champs reçus ne sont pas reconnus : ' + r.fields.join(', '),
             'Transmettez cette liste : le format de lecture sera ajusté.');
         }

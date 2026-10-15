@@ -81,7 +81,7 @@ function settings_sanitize(array $in, ?array $current): array
     $prev = array_merge($d['hpApi'], is_array($base['hpApi'] ?? null) ? $base['hpApi'] : []);
     $s['hpApi'] = [
         'enabled' => is_bool($hp['enabled'] ?? null) ? $hp['enabled'] : (bool) $prev['enabled'],
-        'flavor' => in_array($hp['flavor'] ?? null, ['official', 'generic'], true) ? $hp['flavor'] : ($prev['flavor'] ?: 'official'),
+        'flavor' => in_array($hp['flavor'] ?? null, ['official', 'soap', 'generic'], true) ? $hp['flavor'] : ($prev['flavor'] ?: 'official'),
         'baseUrl' => array_key_exists('baseUrl', $hp) ? (valid_url($hp['baseUrl']) ? clean_str($hp['baseUrl'], 500, '') : '') : $prev['baseUrl'],
         'coursesPath' => array_key_exists('coursesPath', $hp) ? clean_str($hp['coursesPath'], 500, $prev['coursesPath']) : $prev['coursesPath'],
         'authMode' => in_array($hp['authMode'] ?? null, ['bearer', 'header', 'basic', 'query'], true) ? $hp['authMode'] : $prev['authMode'],

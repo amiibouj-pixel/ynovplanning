@@ -11,6 +11,7 @@ require __DIR__ . '/lib/secrets.php';
 require __DIR__ . '/lib/store.php';
 require __DIR__ . '/lib/normalize.php';
 require __DIR__ . '/lib/sources.php';
+require __DIR__ . '/lib/soap.php';
 require __DIR__ . '/lib/schedule.php';
 require __DIR__ . '/lib/auth.php';
 
@@ -160,7 +161,9 @@ try {
                     if (!valid_url($cfgHp['baseUrl'] ?? '')) {
                         throw new RuntimeException('URL http(s) attendue');
                     }
-                    $r = ($cfgHp['flavor'] ?? 'official') === 'generic' ? fetch_hp_generic($cfgHp, $key) : fetch_hp_official($cfgHp, $key, true);
+                    $flavor = $cfgHp['flavor'] ?? 'official';
+                    $r = $flavor === 'generic' ? fetch_hp_generic($cfgHp, $key)
+                        : ($flavor === 'soap' ? fetch_hp_soap($cfgHp, $key, true) : fetch_hp_official($cfgHp, $key, true));
                     $sample = [];
                     foreach (array_slice($r['events'], 0, 5) as $e) {
                         preg_match_all('/^Promotion : (.+)$/m', $e['description'], $g);
@@ -169,7 +172,8 @@ try {
                     }
                     $first = $r['raw'][0] ?? [];
                     json_out(['ok' => true, 'received' => count($r['raw']), 'understood' => count($r['events']),
-                        'fields' => is_array($first) ? array_slice(array_keys($first), 0, 30) : [], 'sample' => $sample]);
+                        'fields' => is_array($first) ? array_slice(array_keys($first), 0, 30) : [], 'sample' => $sample,
+                        'operations' => $r['operations'] ?? null, 'available' => isset($r['available']) ? array_slice($r['available'], 0, 200) : null]);
                 } catch (Throwable $e) {
                     json_out(['ok' => false, 'error' => $e->getMessage()], 400);
                 }

@@ -18,7 +18,7 @@ const DEFAULTS = {
   // Connexion principale : API HyperPlanning avec clé API (chiffrée sur disque, jamais renvoyée au navigateur)
   hpApi: {
     enabled: false,
-    flavor: 'official', // official = API REST PRONOTE Campus / HyperPlanning ; generic = autre API JSON
+    flavor: 'official', // official = API REST PRONOTE Campus / HyperPlanning ; soap = Service Web SOAP (WSDL) ; generic = autre API JSON
     baseUrl: 'https://hp26.ynov.com/MON/hpsw/api/v1/', // Service Web REST HyperPlanning d'Ynov
     coursesPath: '/api/rest/cours?dateDebut={date}&dateFin={date}',
     authMode: 'basic', // bearer | header | basic | query (API officielle : basic)
@@ -86,7 +86,7 @@ function sanitize(input, current) {
   const prevHp = base.hpApi || DEFAULTS.hpApi;
   s.hpApi = {
     enabled: typeof hp.enabled === 'boolean' ? hp.enabled : prevHp.enabled,
-    flavor: hp.flavor === 'generic' ? 'generic' : hp.flavor === 'official' ? 'official' : prevHp.flavor || 'official',
+    flavor: ['official', 'soap', 'generic'].includes(hp.flavor) ? hp.flavor : prevHp.flavor || 'official',
     baseUrl: hp.baseUrl !== undefined ? (validUrl(hp.baseUrl) ? str(hp.baseUrl, 500, '') : '') : prevHp.baseUrl,
     coursesPath: hp.coursesPath !== undefined ? str(hp.coursesPath, 500, prevHp.coursesPath) : prevHp.coursesPath,
     authMode: ['bearer', 'header', 'basic', 'query'].includes(hp.authMode) ? hp.authMode : prevHp.authMode,

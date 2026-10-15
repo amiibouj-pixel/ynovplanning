@@ -80,9 +80,14 @@ function schedule_refresh(bool $force = false): array
         if (!$settings['demoMode']) {
             if ($settings['hpApi']['enabled']) {
                 $jobs[] = ['API HyperPlanning', function () use ($settings) {
-                    return $settings['hpApi']['flavor'] === 'generic'
-                        ? fetch_hp_generic($settings['hpApi'], hp_api_key())['events']
-                        : fetch_hp_official($settings['hpApi'], hp_api_key())['events'];
+                    switch ($settings['hpApi']['flavor']) {
+                        case 'generic':
+                            return fetch_hp_generic($settings['hpApi'], hp_api_key())['events'];
+                        case 'soap':
+                            return fetch_hp_soap($settings['hpApi'], hp_api_key())['events'];
+                        default:
+                            return fetch_hp_official($settings['hpApi'], hp_api_key())['events'];
+                    }
                 }];
             }
             foreach ($settings['sources'] as $i => $src) {

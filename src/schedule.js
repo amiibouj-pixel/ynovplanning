@@ -7,6 +7,7 @@ const { fetchIcal } = require('./sources/ical');
 const { demoEvents } = require('./sources/demo');
 const { fetchHpApi } = require('./sources/hpapi');
 const { fetchHpOfficial } = require('./sources/hpofficial');
+const { fetchHpSoap } = require('./sources/hpsoap');
 const config = require('./config');
 
 const state = {
@@ -73,7 +74,9 @@ async function refresh() {
           run: () =>
             (settings.hpApi.flavor === 'generic'
               ? fetchHpApi(settings.hpApi, store.hpApiKey(), config.timezone)
-              : fetchHpOfficial(settings.hpApi, store.hpApiKey(), config.timezone)
+              : settings.hpApi.flavor === 'soap'
+                ? fetchHpSoap(settings.hpApi, store.hpApiKey(), config.timezone)
+                : fetchHpOfficial(settings.hpApi, store.hpApiKey(), config.timezone)
             ).then((r) => r.events),
         });
       }

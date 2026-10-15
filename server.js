@@ -14,6 +14,7 @@ const schedule = require('./src/schedule');
 const { fetchIcal } = require('./src/sources/ical');
 const { fetchHpApi } = require('./src/sources/hpapi');
 const { fetchHpOfficial } = require('./src/sources/hpofficial');
+const { fetchHpSoap } = require('./src/sources/hpsoap');
 const auth = require('./src/auth');
 
 const app = express();
@@ -218,10 +219,12 @@ api.post('/test-hpapi', async (req, res) => {
   try {
     const u = new URL(cfg.baseUrl);
     if (!/^https?:$/.test(u.protocol)) throw new Error('URL http(s) attendue');
-    const { events, raw } =
+    const { events, raw, operations, available } =
       cfg.flavor === 'generic'
         ? await fetchHpApi(cfg, key, config.timezone)
-        : await fetchHpOfficial(cfg, key, config.timezone, { forceRefs: true });
+        : cfg.flavor === 'soap'
+          ? await fetchHpSoap(cfg, key, config.timezone, { force: true })
+          : await fetchHpOfficial(cfg, key, config.timezone, { forceRefs: true });
     res.json({
       ok: true,
       received: raw.length,
@@ -235,6 +238,8 @@ api.post('/test-hpapi', async (req, res) => {
         classes: (e.description.match(/^Promotion : (.+)$/gm) || []).map((l) => l.slice(12)).join(', '),
         annule: e.status === 'CANCELLED',
       })),
+      operations: operations || null,
+      available: available ? available.slice(0, 200) : null,
     });
   } catch (e) {
     res.status(400).json({ ok: false, error: e.message });

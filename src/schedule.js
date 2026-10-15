@@ -160,7 +160,7 @@ async function start() {
   schedule();
 }
 
-/** Données publiques pour un écran : uniquement ce qui doit s'afficher, aucun secret. */
+// ce qu'on envoie à un écran (pas de clé ni de config)
 function forScreen(screen) {
   const settings = store.load();
   const levels = new Set(screen.levels);

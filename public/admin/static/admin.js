@@ -129,7 +129,7 @@
     var mode = official ? 'basic' : $('#hpAuthMode').value;
     $$('.adv').forEach(function (el) { el.hidden = official; });
     $('#hpUrlHint').hidden = !official;
-    $('#hpUrlHint').textContent = flavor === 'soap' ? 'Adresse du WSDL, en général …/hpsw/wsdl/RpcEncoded' : 'Se termine en général par /hpsw/api/v1/';
+    $('#hpUrlHint').textContent = flavor === 'soap' ? 'Adresse du WSDL, en général .../hpsw/wsdl/RpcEncoded' : 'Se termine en général par /hpsw/api/v1/';
     $('#hpBaseUrl').placeholder = flavor === 'soap' ? 'https://hyperplanning.ecole.fr/hpsw/wsdl/RpcEncoded' : 'https://hyperplanning.ecole.fr/hpsw/api/v1/';
     $('#hpHeaderWrap').hidden = official || (mode !== 'header' && mode !== 'query');
     $('#hpUserWrap').hidden = mode !== 'basic';
@@ -169,7 +169,7 @@
         }
         if (r.received && !r.understood && r.fields && r.fields.length) {
           lines.push('', 'Les champs reçus ne sont pas reconnus : ' + r.fields.join(', '),
-            'Transmettez cette liste : le format de lecture sera ajusté.');
+            'Il faut ajouter ces noms de champs dans hpapi.js.');
         }
         out.textContent = lines.join('\n');
       })
@@ -178,7 +178,7 @@
   });
 
   $('#hpClear').addEventListener('click', function () {
-    if (!window.confirm('Supprimer la clé API enregistrée ? Les écrans garderont les dernières données jusqu\u2019à la saisie d\u2019une nouvelle clé.')) return;
+    if (!window.confirm('Supprimer la clé API enregistrée ? Les écrans garderont les dernières données jusqu\'à la saisie d\'une nouvelle clé.')) return;
     api('POST', '/settings', { hpApi: { clearApiKey: true } })
       .then(function (r) { saved = r.settings; draft = clone(saved); fillForm(); toast('Clé supprimée'); })
       .catch(function (e) { toast(e.message, true); });
@@ -196,7 +196,7 @@
       out.className = 'src-result muted';
       api('POST', '/test-source', { url: $('.src-url', node).value.trim() })
         .then(function (r) { out.textContent = '✓ ' + r.count + ' événements trouvés'; out.className = 'src-result ok'; })
-        .catch(function (e) { out.textContent = '✕ ' + e.message; out.className = 'src-result err'; });
+        .catch(function (e) { out.textContent = '✗ ' + e.message; out.className = 'src-result err'; });
     });
     $('#sources').appendChild(node);
   }
@@ -240,7 +240,7 @@
       var txt = $('.sc-url code', node).textContent;
       (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject())
         .then(function () { toast('URL copiée. Collez-la dans Emity, widget Site web.'); })
-        .catch(function () { toast('Copie impossible : sélectionnez l’URL manuellement', true); });
+        .catch(function () { toast('Copie impossible, sélectionnez le lien à la main.', true); });
     });
     $('.sc-del', node).addEventListener('click', function () {
       if ($$('#screens .screen-row').length <= 1) return toast('Il faut au moins un écran', true);
@@ -332,7 +332,7 @@
       .then(function () { location.href = '/admin/login'; });
   });
 
-  /* ---------- Accueil : connexion en un clic ---------- */
+  // onglet Accueil : bouton Connecter
   var HP_CANDIDATES = ['https://hp26.ynov.com/MON/hpsw/api/v1/']; // Service Web REST HyperPlanning d'Ynov
   function renderQuick() {
     var hp = saved.hpApi;
@@ -347,7 +347,7 @@
   $('#quickConnect').addEventListener('click', function () {
     var key = $('#quickKey').value.trim();
     var st = $('#quickState'), b = this;
-    if (!key && !saved.hpApi.apiKeySet) { st.className = 'quick-state err'; st.textContent = 'Collez d\u2019abord la clé API.'; return; }
+    if (!key && !saved.hpApi.apiKeySet) { st.className = 'quick-state err'; st.textContent = 'Collez d\'abord la clé API.'; return; }
     var hp = saved.hpApi;
     // Format "utilisateur:motdepasse" accepté (authentification du Service Web HyperPlanning)
     var user = hp.username, secret = key;
@@ -374,12 +374,12 @@
             saved = s.settings; draft = clone(saved); fillForm(); renderStatus(s.status); renderQuick(); loadPreview();
             $('#quickKey').value = '';
             st.className = 'quick-state ok';
-            st.textContent = 'Connecté. ' + s.status.count + ' cours aujourd\u2019hui, les écrans sont à jour.';
+            st.textContent = 'Connecté. ' + s.status.count + ' cours aujourd\'hui, les écrans sont à jour.';
           });
       })
       .catch(function (e) {
         st.className = 'quick-state err';
-        st.textContent = 'Connexion impossible : ' + e.message + '. Vérifiez la clé, ou l\u2019adresse du serveur dans l\u2019onglet Connexion (avancé).';
+        st.textContent = 'Connexion impossible : ' + e.message + '. Vérifiez la clé, ou l\'adresse du serveur dans l\'onglet Connexion (avancé).';
       })
       .then(function () { b.disabled = false; });
   });

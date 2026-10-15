@@ -1,5 +1,5 @@
 <?php
-/** Réglages (data/settings.json) : validation par liste blanche, écriture atomique. Port de src/store.js. */
+// Lecture/écriture de data/settings.json (même chose que src/store.js)
 declare(strict_types=1);
 
 const LEVELS = ['B1', 'B2', 'B3', 'M1', 'M2', 'BTS'];
@@ -155,7 +155,7 @@ function settings_save(array $input): array
     return $next;
 }
 
-/** Réglages pour le back-office : jamais la clé, seulement "configurée". */
+// pour l'admin : on renvoie juste apiKeySet, pas la clé
 function settings_public(): array
 {
     $s = settings_load();

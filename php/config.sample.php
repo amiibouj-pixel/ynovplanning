@@ -7,7 +7,7 @@ return [
     // Identifiant du back-office
     'admin_user' => 'peda-montpellier',
 
-    // Hash bcrypt du mot de passe. À générer sur ton ordinateur : npm run hash-password
+    // Hash bcrypt du mot de passe. À générer avec : npm run hash-password
     // (coller la valeur entre apostrophes, elle commence par $2a$ ou $2b$)
     'admin_password_hash' => '',
 

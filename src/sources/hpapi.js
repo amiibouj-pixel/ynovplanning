@@ -1,7 +1,7 @@
 'use strict';
 
 // Connecteur pour une API JSON "maison" : tout est réglable dans l'admin (URL, auth, chemin des cours)
-// parce que je n'ai pas trouvé de doc publique. La lecture des champs est volontairement permissive.
+// parce que je n'ai pas trouvé de doc publique. J'accepte plusieurs noms pour chaque champ.
 
 const TIMEOUT_MS = 20000;
 const MAX_BYTES = 10 * 1024 * 1024;
@@ -61,7 +61,7 @@ async function fetchJson(cfg, apiKey, tz) {
   }
 }
 
-/* ---------- Lecture tolérante du JSON ---------- */
+// lecture du JSON (plusieurs noms possibles par champ)
 
 function norm(k) {
   return String(k).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');

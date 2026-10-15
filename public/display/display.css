@@ -1,4 +1,4 @@
-/* Écran TV - charte ynov.com (menthe #eaf0eb, noir #0a0006, pilules, titres serif)
+/* Écran TV, couleurs et polices reprises de ynov.com
    Pas de grid ni de gap flex : les navigateurs des TV sont vieux.
    backdrop-filter seulement sur le header et le footer, sinon ça rame sur les players. */
 
@@ -50,7 +50,7 @@
 html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
 body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-smoothing: antialiased; }
 
-/* ---------- Canevas + halos de couleur (statiques : aucun coût d'animation) ---------- */
+/* fond + taches de couleur (pas animées sinon ça rame sur les TV) */
 .stage {
   position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; overflow: hidden;
   background-color: var(--bg);
@@ -71,7 +71,7 @@ body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-sm
 }
 .stage.portrait { width: 1080px; height: 1920px; }
 
-/* Matière "verre" commune : translucide, reflet en haut, liseré lumineux, ombre douce */
+/* effet verre (fond clair + bordure blanche) */
 .glass {
   background: var(--glass);
   border: 1px solid var(--glass-edge);
@@ -81,7 +81,7 @@ body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-sm
   .head, .foot { -webkit-backdrop-filter: blur(28px) saturate(180%); backdrop-filter: blur(28px) saturate(180%); }
 }
 
-/* ---------- En-tête : capsule flottante ---------- */
+/* header */
 .head {
   position: absolute; top: 28px; left: 40px; right: 40px; height: 104px; border-radius: 52px; padding: 0 22px 0 40px;
   display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
@@ -126,7 +126,7 @@ body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-sm
 .kicker { font-size: 26px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 3px; }
 .title { font-family: var(--serif); font-weight: 500; font-size: 96px; line-height: .95; margin-top: 10px; letter-spacing: -3px; }
 .hero-side { text-align: right; padding-bottom: 10px; max-width: 1280px; }
-/* Légende des filières : pastilles de verre */
+/* légende des filières */
 .legend { white-space: normal; line-height: 1; }
 .key {
   display: inline-block; margin: 0 0 12px 10px; font-size: 17px; font-weight: 600; white-space: nowrap;
@@ -144,7 +144,7 @@ body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-sm
 .timer { width: 180px; height: 8px; background: var(--glass-line); border-radius: 4px; overflow: hidden; }
 .timer div { height: 100%; width: 0; background: var(--fg); border-radius: 4px; }
 
-/* ---------- Lignes : cartes de verre ---------- */
+/* lignes */
 .board { position: absolute; left: 56px; right: 56px; top: 308px; bottom: 114px; overflow: hidden; }
 .board.out { opacity: 0; -webkit-transition: opacity .3s; transition: opacity .3s; }
 .board.in .row { -webkit-animation: rise .55s cubic-bezier(.2, .8, .2, 1) both; animation: rise .55s cubic-bezier(.2, .8, .2, 1) both; }
@@ -177,7 +177,7 @@ body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-sm
   display: -webkit-flex; display: flex;
 }
 
-/* Pastille de classe : pilule ynov.com remplie avec la couleur de la filière, reflet de verre */
+/* badge classe (couleur de la filière) */
 .pill {
   position: relative; display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center;
   max-width: 100%; height: 74px; padding: 0 34px 0 9px; border-radius: 100px; background: #dbdbdb; color: var(--c-dark);
@@ -209,7 +209,7 @@ body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-sm
 .state.live { background: var(--c-live); border-color: var(--c-live); color: #fff; }
 .state.live:before { content: ''; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #fff; margin-right: 8px; vertical-align: 1px; -webkit-animation: pulse 1.8s ease-in-out infinite; animation: pulse 1.8s ease-in-out infinite; }
 
-/* Salle : tuile noire arrondie (pictos ynov.com) avec reflet */
+/* case salle */
 .room {
   width: 236px; height: 100%; border-radius: 26px; background: var(--tile); color: var(--tile-ink);
   display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column;
@@ -235,7 +235,7 @@ body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-sm
 .empty h2 { font-family: var(--serif); font-weight: 500; font-size: 76px; letter-spacing: -2px; }
 .empty p { font-size: 28px; font-weight: 500; color: var(--sub); margin-top: 18px; }
 
-/* ---------- Pied : capsule flottante ---------- */
+/* footer */
 .foot {
   position: absolute; left: 40px; right: 40px; bottom: 28px; height: 72px; border-radius: 36px; padding: 0 12px 0 32px; overflow: hidden;
   display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;

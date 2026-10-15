@@ -41,7 +41,7 @@
     });
   }
 
-  /* Canevas fixe 1920×1080 (ou 1080×1920) mis à l'échelle de l'écran */
+  /* canvas fixe 1920x1080 (ou 1080x1920) mis à l'échelle */
   function fit() {
     var w = window.innerWidth, h = window.innerHeight;
     var portrait = h > w * 1.1;

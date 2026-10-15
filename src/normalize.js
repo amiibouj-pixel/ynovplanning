@@ -2,8 +2,7 @@
 
 // Transforme les events HyperPlanning en cours affichables (niveau, filière, couleur, salle...)
 
-// Code couleur des filières = tokens officiels de ynov.com (--c-formation-*),
-// recoupés avec les carrés de couleur des écrans actuels (CREADD vert, MKTCD orange, AVI jaune...).
+// couleurs reprises du CSS de ynov.com (--c-formation-*)
 // "ink" = couleur du texte posé sur l'aplat (contraste lisible de loin).
 const FILIERES = [
   { key: 'bts', label: 'BTS Tech', color: '#3d68d1', ink: '#ffffff', univers: 'tech', match: /SIO|CIEL|YLEVEL|SLAM|SISR/ },

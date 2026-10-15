@@ -1,5 +1,5 @@
 <?php
-/** Back-office : session, mot de passe bcrypt, anti brute-force, CSRF, liste d'IP. Port de src/auth.js. */
+// Connexion admin (même chose que src/auth.js)
 declare(strict_types=1);
 
 function admin_ip_allowed(): bool

@@ -23,9 +23,7 @@ const PUB = path.join(__dirname, 'public');
 if (config.trustProxy) app.set('trust proxy', config.trustProxy === 'true' ? 1 : config.trustProxy);
 app.disable('x-powered-by');
 
-// ---------------------------------------------------------------------------
-// En-têtes de sécurité (CSP stricte, pas de script/style externe)
-// ---------------------------------------------------------------------------
+// --- headers de sécu (helmet + CSP) ---
 const baseCsp = {
   defaultSrc: ["'self'"],
   scriptSrc: ["'self'"],
@@ -61,9 +59,7 @@ const displayCsp = helmet.contentSecurityPolicy({
 
 app.use('/assets', express.static(path.join(PUB, 'assets'), { maxAge: '7d', immutable: true }));
 
-// ---------------------------------------------------------------------------
-// Écrans publics (lecture seule)
-// ---------------------------------------------------------------------------
+// --- écrans publics ---
 function findScreen(req, res) {
   if (config.displayKey && !auth.safeEqual(req.query.key || '', config.displayKey)) {
     res.status(403).send('Accès refusé');
@@ -96,9 +92,7 @@ app.get('/api/ecran/:id', (req, res) => {
 
 app.get('/healthz', (req, res) => res.json({ ok: true }));
 
-// ---------------------------------------------------------------------------
-// Back-office (authentifié)
-// ---------------------------------------------------------------------------
+// --- back-office ---
 const admin = express.Router();
 
 admin.use(auth.ipAllowlist);
@@ -249,7 +243,6 @@ api.post('/test-hpapi', async (req, res) => {
 admin.use('/api', api);
 app.use('/admin', admin);
 
-// ---------------------------------------------------------------------------
 app.use((req, res) => res.status(404).send('Not found'));
 app.use((err, req, res, next) => {
   console.error(err);

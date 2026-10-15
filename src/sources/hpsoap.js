@@ -98,16 +98,16 @@ async function httpFetch(url, opts) {
 
 async function loadWsdl(cfg, secret, force) {
   const url = cfg.baseUrl || '';
-  if (!url) throw new Error('Adresse du WSDL manquante (ex. https://…/hpsw/wsdl/RpcEncoded)');
+  if (!url) throw new Error('Adresse du WSDL manquante (ex. https://.../hpsw/wsdl/RpcEncoded)');
   if (!secret) throw new Error('Mot de passe du Service Web manquant');
   if (!force && wsdlCache.url === url && Date.now() - wsdlCache.at < NAMES_TTL_MS) return wsdlCache.data;
 
   const res = await httpFetch(url, { headers: { Accept: 'text/xml, application/xml', Authorization: authHeader(cfg, secret) } });
   if (res.status === 401 || res.status === 403) throw new Error('Identifiant ou mot de passe refusés par HyperPlanning (HTTP ' + res.status + ')');
-  if (!res.ok) throw new Error('WSDL introuvable (HTTP ' + res.status + ') : vérifiez l’adresse …/hpsw/wsdl/RpcEncoded');
+  if (!res.ok) throw new Error('WSDL introuvable (HTTP ' + res.status + ') : vérifiez l\'adresse .../hpsw/wsdl/RpcEncoded');
   const doc = parseXml(await res.text());
   const defs = all(doc, 'definitions')[0];
-  if (!defs) throw new Error('La réponse n’est pas un WSDL : vérifiez l’adresse (elle se termine en général par /hpsw/wsdl/RpcEncoded)');
+  if (!defs) throw new Error('La réponse n\'est pas un WSDL : vérifiez l\'adresse (elle se termine en général par /hpsw/wsdl/RpcEncoded)');
 
   const tns = defs.attrs.targetNamespace || '';
   const messages = {};
@@ -333,7 +333,7 @@ async function fetchHpSoap(cfg, secret, tz, opts) {
   const ops = resolve(wsdl);
   const available = Object.keys(wsdl.ops);
   if (!ops.start && !ops.listRange) {
-    throw new Error('Opérations attendues introuvables dans le WSDL (cours d’une période, horaires). Opérations disponibles : ' + available.slice(0, 80).join(', '));
+    throw new Error('Opérations attendues introuvables dans le WSDL (cours d\'une période, horaires). Opérations disponibles : ' + available.slice(0, 80).join(', '));
   }
   const day = todayISO(tz);
   const dayStart = new Date(day + 'T00:00:00').getTime();
@@ -353,7 +353,7 @@ async function fetchHpSoap(cfg, secret, tz, opts) {
   } else {
     keys = list(await call(cfg, secret, wsdl, ops.listAll));
     if (keys.length > MAX_COURSES) {
-      throw new Error(keys.length + ' cours renvoyés sans filtre de date : trop pour être lus à chaque synchronisation. Il faut une opération « cours entre deux dates » (opérations disponibles : ' + available.slice(0, 80).join(', ') + ')');
+      throw new Error(keys.length + ' cours renvoyés sans filtre de date : trop pour être lus à chaque synchronisation. Il faut une opération "cours entre deux dates" (opérations disponibles : ' + available.slice(0, 80).join(', ') + ')');
     }
   }
   keys = [...new Set(keys.concat(cancelledKeys))];

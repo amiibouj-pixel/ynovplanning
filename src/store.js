@@ -68,7 +68,7 @@ function slug(v) {
     .slice(0, 40);
 }
 
-/** Valide et normalise un objet de réglages venant du back-office (liste blanche stricte). */
+// on ne garde que les champs connus
 function sanitize(input, current) {
   const base = current || DEFAULTS;
   const s = {};
@@ -144,7 +144,7 @@ function load() {
 function save(input) {
   const next = sanitize(input, load());
   fs.mkdirSync(config.dataDir, { recursive: true });
-  // Écriture atomique : fichier temporaire puis renommage
+  // .tmp puis rename, pour ne pas casser le fichier si ça plante pendant l'écriture
   const tmp = FILE + '.' + crypto.randomBytes(4).toString('hex') + '.tmp';
   fs.writeFileSync(tmp, JSON.stringify(next, null, 2), { mode: 0o600 });
   fs.renameSync(tmp, FILE);
@@ -152,7 +152,7 @@ function save(input) {
   return next;
 }
 
-/** Réglages renvoyés au back-office : jamais la clé API, seulement l'information "configurée". */
+// pour l'admin : on renvoie juste apiKeySet, pas la clé
 function publicSettings() {
   const s = JSON.parse(JSON.stringify(load()));
   s.hpApi.apiKeySet = !!s.hpApi.apiKeyEnc || !!config.hpApiKeyEnv;

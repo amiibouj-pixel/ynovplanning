@@ -88,8 +88,8 @@ public/admin/          le back-office
 
 ## Sécurité
 
-Mot de passe en bcrypt, session HttpOnly/SameSite, max 8 essais de connexion par 15 min, token CSRF,
-CSP stricte, admin filtrable par IP (`ADMIN_ALLOWED_IPS`). Les écrans sont en lecture seule.
+Mot de passe hashé (bcrypt), 8 essais max par 15 min, admin limitable par IP (`ADMIN_ALLOWED_IPS`).
+Les écrans sont en lecture seule.
 
 ## À faire
 

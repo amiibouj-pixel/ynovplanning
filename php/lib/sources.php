@@ -155,7 +155,7 @@ function fetch_ical(string $url): array
 function hp_get(array $cfg, string $secret, string $path, array $query = [])
 {
     if (($cfg['baseUrl'] ?? '') === '') {
-        throw new RuntimeException('Adresse du Service Web manquante (ex. https://…/hpsw/api/v1/)');
+        throw new RuntimeException('Adresse du Service Web manquante (ex. https://.../hpsw/api/v1/)');
     }
     if ($secret === '') {
         throw new RuntimeException('Mot de passe / clé du Service Web manquant');
@@ -173,7 +173,7 @@ function hp_get(array $cfg, string $secret, string $path, array $query = [])
         throw new RuntimeException('Accès refusé par HyperPlanning : clé ou identifiant incorrect, ou API REST non activée sur le Service Web');
     }
     if ($status === 404) {
-        throw new RuntimeException('Ressource introuvable : ' . $path . ' (vérifiez l’adresse …/hpsw/api/v1/)');
+        throw new RuntimeException('Ressource introuvable : ' . $path . ' (vérifiez l\'adresse .../hpsw/api/v1/)');
     }
     if ($status >= 400) {
         throw new RuntimeException('HyperPlanning a répondu HTTP ' . $status . ' sur ' . $path);

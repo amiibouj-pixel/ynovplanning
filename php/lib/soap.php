@@ -32,7 +32,7 @@ const SOAP_ROLES = [
     'teacherFirstName' => ['PrenomEnseignant'],
 ];
 
-const SOAP_MAX_COURSES = 400; // garde-fou : pas plus de cours détaillés par synchronisation
+const SOAP_MAX_COURSES = 400; // limite pour ne pas faire des milliers d'appels SOAP
 
 /* ---------- WSDL ---------- */
 
@@ -46,7 +46,7 @@ function soap_wsdl(array $cfg, string $secret, bool $force = false): array
 {
     $url = (string) ($cfg['baseUrl'] ?? '');
     if ($url === '') {
-        throw new RuntimeException('Adresse du WSDL manquante (ex. https://…/hpsw/wsdl/RpcEncoded)');
+        throw new RuntimeException('Adresse du WSDL manquante (ex. https://.../hpsw/wsdl/RpcEncoded)');
     }
     if ($secret === '') {
         throw new RuntimeException('Mot de passe du Service Web manquant');
@@ -61,11 +61,11 @@ function soap_wsdl(array $cfg, string $secret, bool $force = false): array
         throw new RuntimeException('Identifiant ou mot de passe refusés par HyperPlanning (HTTP ' . $status . ')');
     }
     if ($status >= 400) {
-        throw new RuntimeException('WSDL introuvable (HTTP ' . $status . ') : vérifiez l’adresse …/hpsw/wsdl/RpcEncoded');
+        throw new RuntimeException('WSDL introuvable (HTTP ' . $status . ') : vérifiez l\'adresse .../hpsw/wsdl/RpcEncoded');
     }
     $dom = new DOMDocument();
     if (!@$dom->loadXML($body, LIBXML_NONET) || stripos($dom->documentElement->localName ?? '', 'definitions') === false) {
-        throw new RuntimeException('La réponse n’est pas un WSDL : vérifiez l’adresse (elle se termine en général par /hpsw/wsdl/RpcEncoded)');
+        throw new RuntimeException('La réponse n\'est pas un WSDL : vérifiez l\'adresse (elle se termine en général par /hpsw/wsdl/RpcEncoded)');
     }
     $root = $dom->documentElement;
     $tns = $root->getAttribute('targetNamespace');
@@ -433,7 +433,7 @@ function fetch_hp_soap(array $cfg, string $secret, bool $force = false): array
     $wsdl = soap_wsdl($cfg, $secret, $force);
     $ops = soap_resolve($wsdl);
     if (!isset($ops['start']) && !isset($ops['listRange'])) {
-        throw new RuntimeException('Opérations attendues introuvables dans le WSDL (cours d’une période, horaires). Opérations disponibles : '
+        throw new RuntimeException('Opérations attendues introuvables dans le WSDL (cours d\'une période, horaires). Opérations disponibles : '
             . implode(', ', array_slice(array_keys($wsdl['ops']), 0, 80)));
     }
     $day = today_ymd();
@@ -471,7 +471,7 @@ function fetch_hp_soap(array $cfg, string $secret, bool $force = false): array
     }
     if (count($keys) > SOAP_MAX_COURSES && !isset($ops['listRange'])) {
         throw new RuntimeException(count($keys) . ' cours renvoyés sans filtre de date : trop pour être lus à chaque synchronisation. '
-            . 'Il faut une opération « cours entre deux dates » (opérations disponibles : ' . implode(', ', array_slice(array_keys($wsdl['ops']), 0, 80)) . ')');
+            . 'Il faut une opération "cours entre deux dates" (opérations disponibles : ' . implode(', ', array_slice(array_keys($wsdl['ops']), 0, 80)) . ')');
     }
     $timeRes = $calls ? soap_call_many($cfg, $secret, $wsdl, $calls) : [];
     $courses = [];

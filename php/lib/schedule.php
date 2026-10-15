@@ -182,7 +182,7 @@ function schedule_status(array $state): array
     ];
 }
 
-/** Données publiques d'un écran : uniquement ce qui s'affiche, aucun secret. */
+// ce qu'on envoie à un écran (pas de clé ni de config)
 function for_screen(array $screen): array
 {
     $state = schedule_get();

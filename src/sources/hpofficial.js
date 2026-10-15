@@ -21,7 +21,7 @@ function todayISO(tz) {
 }
 
 function client(cfg, secret) {
-  if (!cfg.baseUrl) throw new Error('Adresse du Service Web manquante (ex. https://…/hpsw/api/v1/)');
+  if (!cfg.baseUrl) throw new Error('Adresse du Service Web manquante (ex. https://.../hpsw/api/v1/)');
   if (!secret) throw new Error('Mot de passe / clé du Service Web manquant');
   const base = cfg.baseUrl.replace(/\/?$/, '/');
   const auth = 'Basic ' + Buffer.from((cfg.username || '') + ':' + secret).toString('base64');
@@ -36,7 +36,7 @@ function client(cfg, secret) {
       // Le Service Web redirige vers sa page d'accueil quand l'accès est refusé
       if (res.status >= 300 && res.status < 400) throw new Error('Accès refusé par HyperPlanning : clé ou identifiant incorrect, ou API REST non activée sur le Service Web');
       if (res.status === 401 || res.status === 403) throw new Error('Identifiant ou clé refusés par HyperPlanning (HTTP ' + res.status + ')');
-      if (res.status === 404) throw new Error('Ressource introuvable : ' + path + ' (vérifiez l’adresse …/hpsw/api/v1/)');
+      if (res.status === 404) throw new Error('Ressource introuvable : ' + path + ' (vérifiez l\'adresse .../hpsw/api/v1/)');
       if (!res.ok) throw new Error('HyperPlanning a répondu HTTP ' + res.status + ' sur ' + path);
       const type = res.headers.get('content-type') || '';
       if (!/json/i.test(type)) throw new Error('Accès refusé par HyperPlanning : clé ou identifiant incorrect, ou API REST non activée sur le Service Web');

@@ -59,7 +59,7 @@ function read_json(string $file, $default)
     return is_array($data) ? $data : $default;
 }
 
-/** Écriture atomique (fichier temporaire puis renommage). */
+// .tmp puis rename, pour ne pas casser le fichier si ça plante pendant l'écriture
 function write_json(string $file, $data): void
 {
     $tmp = $file . '.' . bin2hex(random_bytes(4)) . '.tmp';

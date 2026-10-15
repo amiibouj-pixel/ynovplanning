@@ -1,4 +1,4 @@
-# Déploiement en un clic sur Render (https://render.com) : New > Blueprint > choisir ce dépôt.
+# Config Render : New > Blueprint > choisir ce dépôt
 services:
   - type: web
     name: cours-du-jour-ynov

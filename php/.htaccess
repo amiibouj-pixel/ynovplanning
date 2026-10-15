@@ -1,9 +1,10 @@
 # Cours du jour — configuration Apache (IONOS, OVH, o2switch…)
-Options -Indexes
+# (Pas de directive « Options » : refusée par certains hébergeurs, dont IONOS → erreur 500)
 DirectoryIndex index.php
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  RewriteBase /
 
   # Forcer HTTPS (activer le certificat SSL du domaine dans l'espace client avant de décommenter)
   # RewriteCond %{HTTPS} off

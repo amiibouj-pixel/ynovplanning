@@ -53,7 +53,7 @@ function merge_courses(array $courses): array
     return array_values($byKey);
 }
 
-/** Identifie la configuration des sources : si elle change, on ne marque pas tout « modifié ». */
+/** Identifie la configuration des sources : si elle change, on ne marque pas tout "modifié". */
 function source_key(array $settings): string
 {
     return sha1(json_encode([$settings['demoMode'], $settings['hpApi'], $settings['sources'], $settings['groupPrefix']]));

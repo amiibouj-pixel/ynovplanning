@@ -1,5 +1,5 @@
 <?php
-/** HyperPlanning brut -> cours propres (niveau, filière, couleur, salle…). Port de src/normalize.js. */
+/** HyperPlanning brut -> cours propres (niveau, filière, couleur, salle...). Port de src/normalize.js. */
 declare(strict_types=1);
 
 /** Code couleur des filières = tokens ynov.com (--c-formation-*), "ink" = couleur du texte sur l'aplat. */

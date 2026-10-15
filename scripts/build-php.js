@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Assemble la version PHP prête à envoyer par FTP (IONOS, OVH…) dans dist/ionos/.
+ * Assemble la version PHP prête à envoyer par FTP (IONOS, OVH...) dans dist/ionos/.
  * Usage : npm run build:php
  */
 const fs = require('fs');

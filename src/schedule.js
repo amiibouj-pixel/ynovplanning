@@ -139,7 +139,7 @@ async function refresh() {
   return state.running;
 }
 
-/** Changement de source (démo -> API…) : on repart de zéro pour ne pas tout marquer « modifié ». */
+/** Changement de source (démo -> API...) : on repart de zéro pour ne pas tout marquer "modifié". */
 function resetTracking() {
   state.fingerprints.clear();
   state.modifiedAt.clear();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Version PHP du serveur (hébergement mutualisé IONOS, OVH… sans Node.js).
+ * Version PHP du serveur (hébergement mutualisé IONOS, OVH... sans Node.js).
  * Même fonctionnement que server.js : écrans publics en lecture seule + back-office protégé.
  */
 declare(strict_types=1);

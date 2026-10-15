@@ -7,14 +7,14 @@
  * - Base : https://<serveur>/hpsw/api/v1/
  * - Authentification : HTTP Basic (utilisateur "Service Web" + mot de passe / clé)
  * - Séances du jour : GET cours/detail_seances_placees?date_debut=AAAA-MM-JJ&date_fin=AAAA-MM-JJ
- *   → renvoie des CLÉS (matière, salles, promotions…) qu'on traduit en noms via les référentiels.
+ *   -> renvoie des CLÉS (matière, salles, promotions...) qu'on traduit en noms via les référentiels.
  * - Durée exprimée en jours (0.125 = 3 h). jour_heure_debut sans fuseau = heure locale de l'établissement.
  * - Pas de notification de modification côté HyperPlanning : on interroge régulièrement
  *   et la détection des changements se fait dans schedule.js.
  */
 
 const TIMEOUT_MS = 20000;
-const REF_TTL_MS = 60 * 60 * 1000; // référentiels (matières, salles…) rechargés toutes les heures
+const REF_TTL_MS = 60 * 60 * 1000; // référentiels (matières, salles...) rechargés toutes les heures
 const CANCEL_TTL_MS = 30 * 60 * 1000; // détail des cours annulés rechargé toutes les 30 min
 const MAX_CANCEL_FETCH = 60; // requêtes "cours annulés" max par synchronisation
 

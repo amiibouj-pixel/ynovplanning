@@ -16,13 +16,13 @@ return [
     // Ne plus jamais la changer ensuite (sinon il faudra ressaisir la clé API).
     'secrets_key' => '',
 
-    // (Recommandé) Clé ajoutée aux URL d'écran (?key=…) pour que le planning ne soit pas public.
+    // (Recommandé) Clé ajoutée aux URL d'écran (?key=...) pour que le planning ne soit pas public.
     'display_key' => '',
 
     // (Optionnel) Back-office accessible uniquement depuis ces IP. Ex : ['82.64.12.34', '10.0.*']
     'admin_allowed_ips' => [],
 
-    // Sites autorisés à afficher l'écran en iframe (widget « Site web » d'Emity). '*' = tous.
+    // Sites autorisés à afficher l'écran en iframe (widget "Site web" d'Emity). '*' = tous.
     'display_frame_ancestors' => ['*'],
 
     'timezone' => 'Europe/Paris',

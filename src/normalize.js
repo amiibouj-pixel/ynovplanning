@@ -2,11 +2,11 @@
 
 /**
  * Transforme les données brutes HyperPlanning (événements iCal) en "cours" propres
- * pour l'affichage : niveau (B1…M2/BTS), filière, couleur officielle Ynov, salle, etc.
+ * pour l'affichage : niveau (B1...M2/BTS), filière, couleur officielle Ynov, salle, etc.
  */
 
 // Code couleur des filières = tokens officiels de ynov.com (--c-formation-*),
-// recoupés avec les carrés de couleur des écrans actuels (CREADD vert, MKTCD orange, AVI jaune…).
+// recoupés avec les carrés de couleur des écrans actuels (CREADD vert, MKTCD orange, AVI jaune...).
 // "ink" = couleur du texte posé sur l'aplat (contraste lisible de loin).
 const FILIERES = [
   { key: 'bts', label: 'BTS Tech', color: '#3d68d1', ink: '#ffffff', univers: 'tech', match: /SIO|CIEL|YLEVEL|SLAM|SISR/ },
@@ -79,7 +79,7 @@ function formatTeacher(raw) {
       const parts = one.replace(/^(Monsieur|Madame|M\.|Mme|Mr)\s+/i, '').trim().split(/\s+/);
       const upper = parts.filter((w) => w.length > 1 && w === w.toUpperCase() && /\p{L}/u.test(w));
       const others = parts.filter((w) => !upper.includes(w));
-      // Nom seul (export iCal : « Madame RABAUD ») -> « Mme Rabaud »
+      // Nom seul (export iCal : "Madame RABAUD") -> "Mme Rabaud"
       if (!others.length && upper.length) {
         const short = /^madame|^mme/i.test(civ) ? 'Mme ' : civ ? 'M. ' : '';
         return short + upper.map(cap).join(' ');
@@ -126,7 +126,7 @@ function parseDescription(desc) {
         intervenant: 'teacher',
         professeur: 'teacher',
         promotion: 'groups',
-        classe: 'groups', // export iCal Ynov : « Classes : Montpellier | CREADD B3, … »
+        classe: 'groups', // export iCal Ynov : "Classes : Montpellier | CREADD B3, ..."
         td: 'groups',
         groupe: 'groups',
         public: 'groups',
@@ -141,7 +141,7 @@ function parseDescription(desc) {
   return out;
 }
 
-// Les exports HyperPlanning ont des propriétés avec paramètres (SUMMARY;LANGUAGE=fr:…) :
+// Les exports HyperPlanning ont des propriétés avec paramètres (SUMMARY;LANGUAGE=fr:...) :
 // node-ical les renvoie alors sous forme { params, val }.
 function txt(v) {
   if (v && typeof v === 'object' && 'val' in v) return String(v.val);

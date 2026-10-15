@@ -152,7 +152,7 @@ function save(input) {
   return next;
 }
 
-/** Réglages renvoyés au back-office : jamais la clé API, seulement l'information « configurée ». */
+/** Réglages renvoyés au back-office : jamais la clé API, seulement l'information "configurée". */
 function publicSettings() {
   const s = JSON.parse(JSON.stringify(load()));
   s.hpApi.apiKeySet = !!s.hpApi.apiKeyEnc || !!config.hpApiKeyEnv;

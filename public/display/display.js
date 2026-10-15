@@ -1,5 +1,5 @@
 /* Cours du jour, écran TV.
- * Une ligne par classe, une page par niveau (B1 → M2, BTS).
+ * Une ligne par classe, une page par niveau (B1 -> M2, BTS).
  * ES5 + XHR volontairement : tourne sur les navigateurs embarqués des TV et players
  * d'affichage dynamique (Tizen, webOS, Android WebView, Chromium anciens). */
 (function () {

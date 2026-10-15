@@ -349,7 +349,7 @@
     var st = $('#quickState'), b = this;
     if (!key && !saved.hpApi.apiKeySet) { st.className = 'quick-state err'; st.textContent = 'Collez d\u2019abord la clé API.'; return; }
     var hp = saved.hpApi;
-    // Format « utilisateur:motdepasse » accepté (authentification du Service Web HyperPlanning)
+    // Format "utilisateur:motdepasse" accepté (authentification du Service Web HyperPlanning)
     var user = hp.username, secret = key;
     if (key && key.indexOf(':') > 0 && !/^https?:/i.test(key)) { user = key.slice(0, key.indexOf(':')); secret = key.slice(key.indexOf(':') + 1); }
     var cfg = { flavor: hp.flavor || 'official', baseUrl: hp.baseUrl, coursesPath: hp.coursesPath, authMode: hp.authMode, headerName: hp.headerName, username: user, apiKey: secret };

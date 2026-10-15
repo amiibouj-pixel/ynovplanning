@@ -116,7 +116,7 @@ function soap_wsdl(array $cfg, string $secret, bool $force = false): array
     if ($endpoint === '') {
         $endpoint = preg_replace('#/wsdl/.*$#i', '/soap/', $url);
     }
-    // Le WSDL annonce parfois une adresse interne (http://localhost…) : on garde l'hôte saisi dans le back-office
+    // Le WSDL annonce parfois une adresse interne (http://localhost...) : on garde l'hôte saisi dans le back-office
     $given = parse_url($url);
     $ep = parse_url($endpoint);
     if ($given && $ep && ($ep['host'] ?? '') !== ($given['host'] ?? '')) {
@@ -275,7 +275,7 @@ function soap_parse_response(string $body, string $op)
     return null;
 }
 
-/** Appelle plusieurs opérations en parallèle (cURL multi). $calls = [[op, args], …] -> résultats dans le même ordre. */
+/** Appelle plusieurs opérations en parallèle (cURL multi). $calls = [[op, args], ...] -> résultats dans le même ordre. */
 function soap_call_many(array $cfg, string $secret, array $wsdl, array $calls, int $parallel = 8): array
 {
     $results = [];
@@ -350,7 +350,7 @@ function soap_list($v): array
     return $flat;
 }
 
-/** Date/heure HyperPlanning -> horodatage : ISO 8601, « JJ/MM/AAAA HH:MM » ou TDateTime (nombre de jours). */
+/** Date/heure HyperPlanning -> horodatage : ISO 8601, "JJ/MM/AAAA HH:MM" ou TDateTime (nombre de jours). */
 function soap_time($v): ?int
 {
     if (is_array($v)) {
@@ -393,7 +393,7 @@ function soap_duration($v): int
 
 /* ---------- Récupération des cours du jour ---------- */
 
-/** Libellés (matières, salles…) mis en cache 1 h. */
+/** Libellés (matières, salles...) mis en cache 1 h. */
 function soap_names(array $cfg, string $secret, array $wsdl, array $ops, string $role, array $keys, array &$cache): array
 {
     $out = [];

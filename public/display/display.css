@@ -71,7 +71,7 @@ body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-sm
 }
 .stage.portrait { width: 1080px; height: 1920px; }
 
-/* Matière « verre » commune : translucide, reflet en haut, liseré lumineux, ombre douce */
+/* Matière "verre" commune : translucide, reflet en haut, liseré lumineux, ombre douce */
 .glass {
   background: var(--glass);
   border: 1px solid var(--glass-edge);

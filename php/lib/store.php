@@ -155,7 +155,7 @@ function settings_save(array $input): array
     return $next;
 }
 
-/** Réglages pour le back-office : jamais la clé, seulement « configurée ». */
+/** Réglages pour le back-office : jamais la clé, seulement "configurée". */
 function settings_public(): array
 {
     $s = settings_load();

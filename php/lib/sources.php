@@ -1,7 +1,7 @@
 <?php
 /**
  * Sources de données (format commun : uid, summary, description, location, start, end en timestamps, status).
- * - API REST officielle HyperPlanning / PRONOTE Campus (Basic auth, …/hpsw/api/v1/)
+ * - API REST officielle HyperPlanning / PRONOTE Campus (Basic auth, .../hpsw/api/v1/)
  * - Autre API JSON (paramétrable)
  * - Exports iCal (repli)
  * - Démonstration

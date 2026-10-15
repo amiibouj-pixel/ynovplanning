@@ -12,7 +12,7 @@ return [
     'admin_password_hash' => '',
 
     // Clé de chiffrement de la clé API HyperPlanning : 64 caractères aléatoires.
-    // Générer : node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+    // Générer : openssl rand -hex 32
     // Ne plus jamais la changer ensuite (sinon il faudra ressaisir la clé API).
     'secrets_key' => '',
 

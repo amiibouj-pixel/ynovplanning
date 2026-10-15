@@ -1,4 +1,4 @@
-# Image de production : docker build -t cours-du-jour . && docker run ... (voir README)
+# docker compose up -d (après avoir rempli le .env)
 FROM node:20-alpine
 ENV NODE_ENV=production TZ=Europe/Paris DATA_DIR=/data
 RUN apk add --no-cache tzdata

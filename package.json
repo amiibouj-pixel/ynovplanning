@@ -2,11 +2,11 @@
   "name": "ynov-planning-ecrans",
   "version": "1.0.0",
   "private": true,
-  "description": "Affichage dynamique des cours HyperPlanning pour les écrans Ynov Campus (compatible Emity) + back-office sécurisé",
+  "description": "Affichage des cours du jour HyperPlanning sur les écrans du campus Ynov (Emity) + back-office",
   "main": "server.js",
   "type": "commonjs",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "start": "node server.js",

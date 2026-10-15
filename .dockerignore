@@ -2,3 +2,8 @@ node_modules
 data
 .env
 *.tmp
+.git
+dist
+php
+docs
+*.md

@@ -34,7 +34,8 @@ openssl rand -hex 32       # pour SESSION_SECRET, puis encore une fois pour SECR
 npm start
 ```
 
-En local sans HTTPS il faut mettre `COOKIE_SECURE=false` dans le `.env`.
+`SESSION_SECRET` est obligatoire sinon le serveur refuse de démarrer. En local sans HTTPS il faut aussi
+mettre `COOKIE_SECURE=false` dans le `.env`. `npm run dev` relance le serveur à chaque modif.
 
 - écran : http://localhost:3000/ecran/general
 - admin : http://localhost:3000/admin
@@ -63,14 +64,15 @@ Le mot de passe du Service Web est chiffré (AES-256-GCM) et n'est jamais envoy�
 
 Pour une mise à jour : refaire le build et renvoyer les fichiers sans toucher au dossier `data/`.
 
-Il y a aussi un `Dockerfile`, un `docker-compose.yml` et une config `render.yaml` si on veut l'héberger
-ailleurs, plus des exemples nginx/systemd dans `deploy/`.
+Sinon avec Docker : remplir le `.env` puis `docker compose up -d`. Il y a aussi une config `render.yaml`
+et des exemples nginx/systemd dans `deploy/`.
 
 ## Mettre l'écran dans Emity
 
 Dans l'admin, onglet Écrans, "Copier l'URL", puis dans Emity : widget Site web en plein écran.
 On peut créer plusieurs écrans (par ex. un écran à l'étage 3 avec seulement les M1/M2).
-Pense à mettre une `display_key` pour que le planning ne soit pas public.
+Pense à mettre une clé d'écran (`DISPLAY_KEY` dans le `.env`, ou `display_key` dans `php/config.php`)
+pour que le planning ne soit pas public.
 
 ## Organisation du code
 
@@ -94,6 +96,7 @@ CSP stricte, admin filtrable par IP (`ADMIN_ALLOWED_IPS`). Les écrans sont en l
 - tester le connecteur SOAP sur le vrai serveur HyperPlanning
 - ajouter la police LT Superior Serif pour les titres (pour l'instant c'est Source Serif)
 
-## Police
+## Licence
 
-LT Superior (police de ynov.com) est sous licence SIL OFL, voir `public/assets/fonts/lt-superior/OFL.txt`.
+Code perso, pas de licence open source pour l'instant. La police LT Superior (celle de ynov.com) est sous
+licence SIL OFL, voir `public/assets/fonts/lt-superior/OFL.txt`. Le logo et la charte appartiennent à Ynov.

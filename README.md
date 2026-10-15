@@ -80,6 +80,17 @@ Back-office → **Source HyperPlanning** :
 2. Adresse, utilisateur, mot de passe / clé → **Tester la connexion** (affiche les cours du jour reconnus).
 3. Cocher « Utiliser l'API HyperPlanning », décocher le mode démonstration, **Enregistrer**.
 
+### Service Web SOAP (ancien Service Web HYPERPLANNING)
+
+Si l'école n'a que le Service Web « classique » (adresse du type `https://<serveur>/hpsw/wsdl/RpcEncoded`) :
+Back-office → **Connexion (avancé)** → Type d'API « HyperPlanning, Service Web SOAP (WSDL) », adresse du WSDL,
+utilisateur et mot de passe du Service Web → **Tester la connexion**.
+
+Le connecteur lit le WSDL et choisit, pour chaque information (cours du jour, horaires, matière, salles, classes,
+enseignants, annulations), la première opération existante parmi des noms connus (`php/lib/soap.php` et
+`src/sources/hpsoap.js`, constante des rôles). Le test affiche les opérations utilisées (✓) ou introuvables (✗)
+ainsi que la liste complète des opérations du WSDL : s'il en manque une, il suffit d'ajouter son nom dans la liste.
+
 ### Mises à jour
 
 HyperPlanning ne prévient pas quand un cours change (pas de webhook dans l'API). Le serveur relit donc le planning

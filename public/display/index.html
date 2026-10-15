@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Cours du jour | Ynov Campus</title>
-  <link rel="preload" href="/assets/fonts/lt-superior/LTSuperior-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="/assets/fonts/lt-superior/LTSuperior-Bold.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="/assets/fonts/source-serif-4-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/display/display.css?v=20">
+  <link rel="stylesheet" href="/display/display.css?v=30">
 </head>
 <body>
   <div id="stage" class="stage">
-    <header class="head">
-      <img class="logo" src="/assets/logo-ynov.png" alt="Ynov">
+    <header class="head glass">
+      <img class="logo logo-dark" src="/assets/logo-ynov-dark.png" alt="Ynov">
+      <img class="logo logo-light" src="/assets/logo-ynov-light.png" alt="">
       <nav class="levels" id="levels" aria-label="Niveaux"></nav>
-      <span class="time" id="time">--:--</span>
+      <div class="clock"><span class="live-dot"></span><span class="time" id="time">--:--</span></div>
     </header>
 
     <section class="hero">
@@ -24,18 +25,17 @@
       </div>
       <div class="hero-side">
         <div class="legend" id="legend"></div>
-        <span class="part" id="part"></span>
-        <div class="timer"><div id="timer"></div></div>
+        <div class="pager" id="pager"><span class="part" id="part"></span><div class="timer"><div id="timer"></div></div></div>
       </div>
     </section>
 
     <main class="board" id="board"></main>
 
-    <footer class="foot">
+    <footer class="foot glass">
       <div class="notice" id="notice"><span id="notice-text"></span></div>
       <span class="sync" id="sync"></span>
     </footer>
   </div>
-  <script src="/display/display.js?v=20"></script>
+  <script src="/display/display.js?v=30"></script>
 </body>
 </html>

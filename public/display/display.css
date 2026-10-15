@@ -1,8 +1,9 @@
-/* Cours du jour, écran TV, DA ynov.com
-   Repris du site : fond menthe #eaf0eb, header noir + filet arc-en-ciel 1px, titres serif,
-   pastilles blanches à liseré dégradé selon l'univers (Tech / Création / Archi),
-   boutons-pilules noirs, carrés noirs arrondis.
-   Navigateurs TV anciens : pas de CSS Grid, pas de "gap" flex. */
+/* Cours du jour, écran TV — DA ynov.com en « liquid glass »
+   Base Ynov : fond menthe #eaf0eb, noir #0a0006, pilules, titres serif, dégradés de la marque.
+   Couche verre (inspiration Apple / Airbnb) : capsules translucides flottantes, reflets en bordure,
+   cartes très arrondies à ombre douce, halos colorés en fond.
+   Navigateurs TV anciens : pas de CSS Grid ni de « gap » flex ; le flou réel (backdrop-filter)
+   n'est appliqué que s'il est supporté, et seulement sur l'en-tête et le pied (coût GPU). */
 
 /* LT Superior : police du site ynov.com (LyonsType, SIL OFL 1.1, voir assets/fonts/lt-superior/OFL.txt) */
 @font-face { font-family: 'LT Superior'; font-weight: 500; src: url('/assets/fonts/lt-superior/LTSuperior-Medium.ttf') format('truetype'); }
@@ -11,177 +12,278 @@
 /* LT Superior Serif (titres du site) : déposer LTSuperiorSerif-Medium.ttf ici pour l'utiliser ; sinon Source Serif 4 */
 @font-face { font-family: 'LT Superior Serif'; font-weight: 500; src: url('/assets/fonts/lt-superior/LTSuperiorSerif-Medium.ttf') format('truetype'); }
 @font-face { font-family: 'Source Serif 4'; font-weight: 500; src: url('/assets/fonts/source-serif-4-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Source Serif 4'; font-weight: 600; src: url('/assets/fonts/source-serif-4-latin-600-normal.woff2') format('woff2'); }
 
 :root {
   /* Tokens ynov.com */
   --c-dark: #0a0006;
   --c-light: #eaf0eb;
-  --c-text: #1d1d1d;
-  --c-muted: #696969;
-  --c-line: #bdc0bd;
-  --c-alert: #c20000;
+  --c-alert: #e0242b;
   --c-yellow: #eeff57;
+  --c-live: #12b76a;
   --gradient-nav-border: linear-gradient(90deg, #ff1a1a 4.47%, #ff84ef 16.01%, #65eaaf 47.39%, #00eaff 61.29%, #859cff 78.19%, #4a8cff 87.11%, #018e4d 95.87%);
-  --gradient-tech: linear-gradient(92deg, #eeff57 0%, #5affb6 35%, #00eaff 76%, #859cff 100%);
-  --gradient-creative: linear-gradient(92deg, #ff1a1a 16%, #ff84ef 63%, #eeff57 96%);
-  --gradient-archi: linear-gradient(92deg, #859cff 0%, #4a8cff 43%, #018e4d 100%);
-  --gradient-corpo: linear-gradient(92deg, #ff1a1a 4%, #ff84ef 16%, #eeff57 30%, #5affb6 47%, #00eaff 61%, #859cff 78%, #4a8cff 87%, #018e4d 96%);
   --sans: 'LT Superior', 'Helvetica Neue', Arial, sans-serif;
   --serif: 'LT Superior Serif', 'Source Serif 4', Georgia, serif;
 
   --bg: var(--c-light);
   --fg: var(--c-dark);
-  --sub: var(--c-muted);
-  --rule: var(--c-line);
+  --sub: rgba(10, 0, 6, .56);
+  --glass: rgba(255, 255, 255, .58);
+  --glass-strong: rgba(255, 255, 255, .72);
+  --glass-edge: rgba(255, 255, 255, .9);
+  --glass-line: rgba(10, 0, 6, .07);
+  --shadow: 0 18px 40px -18px rgba(24, 40, 30, .28), 0 2px 6px rgba(24, 40, 30, .06);
+  --tile: var(--c-dark);
+  --tile-ink: #fff;
 }
 .dark {
-  --bg: #0a0006;
+  --bg: #07020a;
   --fg: #ffffff;
-  --sub: #a9a3a8;
-  --rule: #2f272d;
+  --sub: rgba(255, 255, 255, .58);
+  --glass: rgba(255, 255, 255, .07);
+  --glass-strong: rgba(255, 255, 255, .11);
+  --glass-edge: rgba(255, 255, 255, .22);
+  --glass-line: rgba(255, 255, 255, .08);
+  --shadow: 0 24px 48px -20px rgba(0, 0, 0, .7);
+  --tile: #ffffff;
+  --tile-ink: var(--c-dark);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
 body { font-family: var(--sans); color: var(--fg); cursor: none; -webkit-font-smoothing: antialiased; }
 
+/* ---------- Canevas + halos de couleur (statiques : aucun coût d'animation) ---------- */
 .stage {
-  position: absolute; top: 0; left: 0; width: 1920px; height: 1080px;
-  background: var(--bg); overflow: hidden;
+  position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; overflow: hidden;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(900px 620px at 6% 0%, rgba(90, 255, 182, .55), rgba(90, 255, 182, 0) 70%),
+    radial-gradient(820px 640px at 96% 8%, rgba(133, 156, 255, .45), rgba(133, 156, 255, 0) 70%),
+    radial-gradient(760px 560px at 78% 100%, rgba(255, 132, 239, .30), rgba(255, 132, 239, 0) 70%),
+    radial-gradient(700px 520px at 18% 96%, rgba(0, 234, 255, .30), rgba(0, 234, 255, 0) 70%),
+    radial-gradient(520px 380px at 50% 46%, rgba(238, 255, 87, .22), rgba(238, 255, 87, 0) 70%);
   -webkit-transform-origin: 0 0; transform-origin: 0 0;
+}
+.dark.stage {
+  background-image:
+    radial-gradient(900px 620px at 6% 0%, rgba(1, 142, 77, .35), rgba(1, 142, 77, 0) 70%),
+    radial-gradient(820px 640px at 96% 8%, rgba(74, 140, 255, .30), rgba(74, 140, 255, 0) 70%),
+    radial-gradient(760px 560px at 78% 100%, rgba(255, 26, 26, .18), rgba(255, 26, 26, 0) 70%),
+    radial-gradient(700px 520px at 18% 96%, rgba(0, 234, 255, .16), rgba(0, 234, 255, 0) 70%);
 }
 .stage.portrait { width: 1080px; height: 1920px; }
 
-/* ---------- Header noir (comme la nav du site) ---------- */
+/* Matière « verre » commune : translucide, reflet en haut, liseré lumineux, ombre douce */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 var(--glass-edge), inset 0 -1px 0 var(--glass-line), var(--shadow);
+}
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .head, .foot { -webkit-backdrop-filter: blur(28px) saturate(180%); backdrop-filter: blur(28px) saturate(180%); }
+}
+
+/* ---------- En-tête : capsule flottante ---------- */
 .head {
-  position: relative; height: 120px; background: var(--c-dark); color: #fff; padding: 0 64px;
+  position: absolute; top: 28px; left: 40px; right: 40px; height: 104px; border-radius: 52px; padding: 0 22px 0 40px;
   display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
 }
-.head:after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--gradient-nav-border); }
-.logo { height: 64px; mix-blend-mode: lighten; -webkit-flex: none; flex: none; }
-.levels { -webkit-flex: 1; flex: 1; margin-left: 56px; white-space: nowrap; }
+.logo { height: 46px; -webkit-flex: none; flex: none; }
+.logo-light { display: none; }
+.dark .logo-dark { display: none; }
+.dark .logo-light { display: block; }
+.levels {
+  -webkit-flex: 1; flex: 1; margin-left: 40px; white-space: nowrap; overflow: hidden;
+}
 .lv {
-  display: inline-block; vertical-align: middle; margin-right: 10px;
-  font-size: 26px; font-weight: 500; color: #fff; padding: 12px 26px; border-radius: 100px;
-  border: 1px solid transparent;
+  display: inline-block; vertical-align: middle; margin-right: 6px;
+  font-size: 25px; font-weight: 500; color: var(--sub); padding: 14px 26px; border-radius: 100px;
 }
-.lv.on { background: #fff; color: var(--c-dark); font-weight: 600; }
+.lv.on {
+  background: var(--fg); color: var(--bg); font-weight: 600;
+  box-shadow: 0 8px 18px -8px rgba(10, 0, 6, .55);
+}
 .lv-short { display: none; }
-.time { font-size: 54px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -1px; -webkit-flex: none; flex: none; }
-
-/* ---------- Hero (titre serif comme "L'école des transformations digitales") ---------- */
-.hero {
-  height: 190px; margin: 0 64px; border-bottom: 1px solid var(--rule);
-  display: -webkit-flex; display: flex; -webkit-align-items: flex-end; align-items: flex-end;
-  -webkit-justify-content: space-between; justify-content: space-between; padding-bottom: 22px;
+.clock {
+  -webkit-flex: none; flex: none; height: 72px; border-radius: 36px; padding: 0 30px;
+  background: var(--glass-strong); border: 1px solid var(--glass-edge);
+  display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
 }
-.kicker { font-family: var(--serif); font-weight: 500; font-size: 30px; color: var(--sub); }
-.title { font-family: var(--serif); font-weight: 500; font-size: 92px; line-height: 1; margin-top: 6px; letter-spacing: -1px; }
-.hero-side { text-align: right; padding-bottom: 8px; max-width: 1000px; }
-/* Légende des filières présentes sur la page */
+.time { font-size: 46px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+.live-dot {
+  width: 14px; height: 14px; border-radius: 50%; background: var(--c-live); margin-right: 16px;
+  box-shadow: 0 0 0 6px rgba(18, 183, 106, .18);
+  -webkit-animation: pulse 2.4s ease-in-out infinite; animation: pulse 2.4s ease-in-out infinite;
+}
+.stale-mode .live-dot { background: #f04438; box-shadow: 0 0 0 6px rgba(240, 68, 56, .18); }
+@-webkit-keyframes pulse { 50% { opacity: .35; } }
+@keyframes pulse { 50% { opacity: .35; } }
+
+/* ---------- Titre de page ---------- */
+.hero {
+  position: absolute; top: 150px; left: 72px; right: 72px; height: 140px;
+  display: -webkit-flex; display: flex; -webkit-align-items: flex-end; align-items: flex-end;
+  -webkit-justify-content: space-between; justify-content: space-between;
+}
+.kicker { font-size: 26px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 3px; }
+.title { font-family: var(--serif); font-weight: 500; font-size: 96px; line-height: .95; margin-top: 10px; letter-spacing: -3px; }
+.hero-side { text-align: right; padding-bottom: 10px; max-width: 1280px; }
+/* Légende des filières : pastilles de verre */
 .legend { white-space: normal; line-height: 1; }
-.key { display: inline-block; margin: 0 0 10px 20px; font-size: 19px; font-weight: 500; white-space: nowrap; }
-.key i { display: inline-block; width: 18px; height: 18px; border-radius: 50%; margin-right: 9px; vertical-align: -2px; }
-.part { display: inline-block; font-size: 22px; font-weight: 500; border: 1px solid var(--fg); border-radius: 100px; padding: 8px 20px; }
-.part:empty { display: none; }
-.timer { width: 220px; height: 3px; background: var(--rule); margin-top: 16px; margin-left: auto; border-radius: 2px; overflow: hidden; }
-.timer div { height: 100%; width: 0; background: var(--fg); }
-
-/* ---------- Lignes ---------- */
-.board { position: absolute; left: 64px; right: 64px; top: 312px; bottom: 76px; overflow: hidden; }
-.board.out { opacity: 0; -webkit-transition: opacity .3s; transition: opacity .3s; }
-.board.in { -webkit-animation: show .45s ease both; animation: show .45s ease both; }
-@-webkit-keyframes show { from { opacity: 0; -webkit-transform: translateY(10px); } to { opacity: 1; -webkit-transform: none; } }
-@keyframes show { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-
-.row { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; border-bottom: 1px solid var(--rule); }
-.c-class { width: 560px; -webkit-flex: none; flex: none; padding-right: 32px; }
-.c-course { -webkit-flex: 1; flex: 1; min-width: 0; padding-right: 32px; }
-.c-time { width: 250px; -webkit-flex: none; flex: none; }
-.c-room { width: 250px; -webkit-flex: none; flex: none; }
-
-/* Pastille de classe : forme des pilules ynov.com, remplie avec la couleur officielle de la filière */
-.pill {
+.key {
+  display: inline-block; margin: 0 0 12px 10px; font-size: 17px; font-weight: 600; white-space: nowrap;
+  padding: 9px 16px 9px 11px; border-radius: 100px; background: var(--glass); border: 1px solid var(--glass-edge);
+}
+.key i { display: inline-block; width: 18px; height: 18px; border-radius: 50%; margin-right: 9px; vertical-align: -3px; box-shadow: inset 0 0 0 1px rgba(10, 0, 6, .12); }
+.pager {
   display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center;
-  max-width: 100%; height: 86px; padding: 0 38px 0 10px; border-radius: 100px; background: #dbdbdb; color: var(--c-dark);
+  margin-top: 4px; padding: 10px 12px 10px 22px; border-radius: 100px;
+  background: var(--glass-strong); border: 1px solid var(--glass-edge);
+}
+.pager.solo { display: none; }
+.part { font-size: 20px; font-weight: 600; color: var(--sub); margin-right: 16px; white-space: nowrap; }
+.part:empty { display: none; }
+.timer { width: 180px; height: 8px; background: var(--glass-line); border-radius: 4px; overflow: hidden; }
+.timer div { height: 100%; width: 0; background: var(--fg); border-radius: 4px; }
+
+/* ---------- Lignes : cartes de verre ---------- */
+.board { position: absolute; left: 56px; right: 56px; top: 308px; bottom: 114px; overflow: hidden; }
+.board.out { opacity: 0; -webkit-transition: opacity .3s; transition: opacity .3s; }
+.board.in .row { -webkit-animation: rise .55s cubic-bezier(.2, .8, .2, 1) both; animation: rise .55s cubic-bezier(.2, .8, .2, 1) both; }
+.board.in .row:nth-child(2) { -webkit-animation-delay: .04s; animation-delay: .04s; }
+.board.in .row:nth-child(3) { -webkit-animation-delay: .08s; animation-delay: .08s; }
+.board.in .row:nth-child(4) { -webkit-animation-delay: .12s; animation-delay: .12s; }
+.board.in .row:nth-child(5) { -webkit-animation-delay: .16s; animation-delay: .16s; }
+.board.in .row:nth-child(6) { -webkit-animation-delay: .2s; animation-delay: .2s; }
+.board.in .row:nth-child(7) { -webkit-animation-delay: .24s; animation-delay: .24s; }
+.board.in .row:nth-child(n+8) { -webkit-animation-delay: .28s; animation-delay: .28s; }
+@-webkit-keyframes rise { from { opacity: 0; -webkit-transform: translateY(18px) scale(.985); } to { opacity: 1; -webkit-transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: none; } }
+
+.row {
+  position: relative; margin-bottom: 14px; padding: 0 14px 0 14px; border-radius: 34px;
+  display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
+  background: var(--glass); border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 var(--glass-edge), var(--shadow);
+}
+.row.is-live { background: var(--glass-strong); }
+.c-class {
+  width: 560px; -webkit-flex: none; flex: none; padding-right: 30px;
+  display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
+}
+.c-class .pill { -webkit-flex: 0 1 auto; flex: 0 1 auto; min-width: 0; }
+.c-course { -webkit-flex: 1; flex: 1; min-width: 0; padding-right: 30px; }
+.c-time { width: 240px; -webkit-flex: none; flex: none; }
+.c-room {
+  width: 236px; -webkit-flex: none; flex: none; -webkit-align-self: stretch; align-self: stretch; padding: 10px 0;
+  display: -webkit-flex; display: flex;
+}
+
+/* Pastille de classe : pilule ynov.com remplie avec la couleur de la filière, reflet de verre */
+.pill {
+  position: relative; display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center;
+  max-width: 100%; height: 74px; padding: 0 34px 0 9px; border-radius: 100px; background: #dbdbdb; color: var(--c-dark);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), inset 0 -2px 0 rgba(10, 0, 6, .08), 0 10px 22px -12px rgba(10, 0, 6, .45);
 }
 .pill .lvl {
-  -webkit-flex: none; flex: none; width: 66px; height: 66px; border-radius: 50%; background: var(--c-dark); color: #fff;
-  font-size: 25px; font-weight: 700; line-height: 66px; text-align: center; margin-right: 18px;
+  -webkit-flex: none; flex: none; width: 56px; height: 56px; border-radius: 50%; background: var(--c-dark); color: #fff;
+  font-size: 22px; font-weight: 700; line-height: 56px; text-align: center; margin-right: 16px;
 }
 .pill .lvl.wide { width: auto; padding: 0 14px; border-radius: 28px; }
-.pill .prog { font-size: 40px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .2px; }
-.also { font-size: 19px; font-weight: 500; color: var(--sub); margin: 8px 0 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.subject { font-size: 32px; font-weight: 600; line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.teacher { font-size: 23px; font-weight: 500; color: var(--sub); margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tag { display: inline-block; vertical-align: 5px; margin-left: 12px; font-size: 17px; font-weight: 600; padding: 4px 14px; border-radius: 100px; background: var(--c-yellow); color: var(--c-dark); }
-
-.hours { font-size: 36px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.state { display: inline-block; margin-top: 10px; font-size: 18px; font-weight: 600; padding: 5px 16px; border-radius: 100px; border: 1px solid var(--fg); white-space: nowrap; }
-.state.live { background: var(--fg); color: var(--bg); }
-
-/* Salle : carré noir arrondi, comme les pictos du site */
-.room {
-  width: 250px; height: 104px; border-radius: 24px; background: var(--c-dark); color: #fff;
-  display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column;
-  -webkit-justify-content: center; justify-content: center; padding: 0 22px; overflow: hidden;
+.pill .prog { font-size: 35px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .2px; }
+.also {
+  -webkit-flex: none; flex: none; margin-left: 12px; font-size: 18px; font-weight: 700; color: var(--sub); white-space: nowrap;
+  padding: 8px 14px; border-radius: 100px; background: var(--glass-strong); border: 1px solid var(--glass-edge);
 }
-.dark .room { background: #fff; color: var(--c-dark); }
-.room small { font-size: 17px; font-weight: 500; opacity: .6; }
-.room b { font-size: 54px; font-weight: 700; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
-.room b.long { font-size: 25px; line-height: 1.1; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.room small + b.long { margin-top: 2px; }
-.room.note { background: transparent; color: var(--fg); border: 1px solid var(--fg); }
-.room.note b { font-size: 26px; }
-.room.cancel { background: var(--c-alert); color: #fff; border: 0; }
 
-.cancelled .pill, .cancelled .subject, .cancelled .teacher, .cancelled .hours { opacity: .4; }
+.subject { font-size: 32px; font-weight: 700; line-height: 1.15; letter-spacing: -.2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.teacher { font-size: 22px; font-weight: 500; color: var(--sub); margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tag {
+  display: inline-block; vertical-align: 5px; margin-left: 12px; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  padding: 6px 14px; border-radius: 100px; background: var(--c-yellow); color: var(--c-dark);
+}
+
+.hours { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: -.5px; }
+.state {
+  display: inline-block; margin-top: 10px; font-size: 17px; font-weight: 700; padding: 7px 16px; border-radius: 100px; white-space: nowrap;
+  background: var(--glass-strong); border: 1px solid var(--glass-edge); color: var(--fg);
+}
+.state.live { background: var(--c-live); border-color: var(--c-live); color: #fff; }
+.state.live:before { content: ''; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #fff; margin-right: 8px; vertical-align: 1px; -webkit-animation: pulse 1.8s ease-in-out infinite; animation: pulse 1.8s ease-in-out infinite; }
+
+/* Salle : tuile noire arrondie (pictos ynov.com) avec reflet */
+.room {
+  width: 236px; height: 100%; border-radius: 26px; background: var(--tile); color: var(--tile-ink);
+  display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column;
+  -webkit-justify-content: center; justify-content: center; padding: 0 24px; overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 14px 26px -14px rgba(10, 0, 6, .7);
+}
+.room small { font-size: 15px; font-weight: 700; opacity: .55; text-transform: uppercase; letter-spacing: 2px; }
+.room b { font-size: 48px; font-weight: 700; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+.room b.long { font-size: 25px; line-height: 1.1; letter-spacing: 0; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.room small + b.long { margin-top: 2px; }
+.room.note { background: var(--glass-strong); color: var(--fg); border: 1px solid var(--glass-edge); box-shadow: inset 0 1px 0 var(--glass-edge); }
+.room.note b { font-size: 26px; letter-spacing: 0; }
+.room.cancel { background: var(--c-alert); color: #fff; }
+
+.cancelled { background: var(--glass); }
+.cancelled .pill, .cancelled .subject, .cancelled .teacher, .cancelled .hours { opacity: .38; }
 .cancelled .subject { text-decoration: line-through; }
 
-.empty { padding-top: 160px; }
-.empty h2 { font-family: var(--serif); font-weight: 500; font-size: 72px; }
-.empty p { font-size: 30px; font-weight: 500; color: var(--sub); margin-top: 18px; }
+.empty {
+  margin: 60px auto 0; max-width: 1100px; text-align: center; padding: 90px 60px; border-radius: 48px;
+  background: var(--glass); border: 1px solid var(--glass-edge); box-shadow: inset 0 1px 0 var(--glass-edge), var(--shadow);
+}
+.empty h2 { font-family: var(--serif); font-weight: 500; font-size: 76px; letter-spacing: -2px; }
+.empty p { font-size: 28px; font-weight: 500; color: var(--sub); margin-top: 18px; }
 
-/* ---------- Footer noir (comme la barre basse du site) ---------- */
+/* ---------- Pied : capsule flottante ---------- */
 .foot {
-  position: absolute; left: 0; right: 0; bottom: 0; height: 76px; background: var(--c-dark); color: #fff; padding: 0 64px;
+  position: absolute; left: 40px; right: 40px; bottom: 28px; height: 72px; border-radius: 36px; padding: 0 12px 0 32px; overflow: hidden;
   display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
 }
-.foot:before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--gradient-nav-border); }
-.notice { -webkit-flex: 1; flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; font-size: 26px; font-weight: 500; margin-right: 32px; }
-.notice.alert span { background: var(--c-alert); padding: 6px 18px; border-radius: 100px; }
+.foot:after { content: ''; position: absolute; left: 36px; right: 36px; bottom: 0; height: 2px; border-radius: 2px; background: var(--gradient-nav-border); opacity: .9; }
+.notice { -webkit-flex: 1; flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; font-size: 25px; font-weight: 600; margin-right: 24px; }
+.notice.alert span { background: var(--c-alert); color: #fff; padding: 7px 20px; border-radius: 100px; }
 .notice.scroll span { display: inline-block; padding-left: 100%; -webkit-animation: marquee linear infinite; animation: marquee linear infinite; }
 @-webkit-keyframes marquee { to { -webkit-transform: translateX(-100%); } }
 @keyframes marquee { to { transform: translateX(-100%); } }
-.sync { -webkit-flex: none; flex: none; font-size: 19px; font-weight: 500; border: 1px solid rgba(255,255,255,.6); border-radius: 100px; padding: 8px 20px; }
+.sync {
+  -webkit-flex: none; flex: none; font-size: 18px; font-weight: 600; color: var(--sub);
+  border-radius: 100px; padding: 12px 22px; background: var(--glass-strong); border: 1px solid var(--glass-edge);
+}
 .sync:empty { display: none; }
-.sync.stale { border-color: #ff8a8a; color: #ff8a8a; }
+.sync.stale { color: #fff; background: #f04438; border-color: #f04438; }
 
 /* ---------- Écran vertical ---------- */
-.portrait .head { height: 110px; padding: 0 36px; }
-.portrait .logo { height: 50px; }
-.portrait .levels { margin-left: 24px; }
-.portrait .lv { font-size: 24px; padding: 10px 18px; margin-right: 4px; }
+.portrait .head { top: 24px; left: 24px; right: 24px; height: 96px; padding: 0 14px 0 28px; }
+.portrait .logo { height: 36px; }
+.portrait .levels { margin-left: 18px; }
+.portrait .lv { font-size: 22px; padding: 12px 16px; margin-right: 2px; }
 .portrait .lv-long { display: none; }
 .portrait .lv-short { display: inline; }
-.portrait .time { font-size: 44px; }
-.portrait .hero { margin: 0 36px; height: 150px; }
-.portrait .kicker { font-size: 26px; }
-.portrait .title { font-size: 60px; }
-.portrait .board { left: 36px; right: 36px; top: 260px; }
-.portrait .c-class { width: 400px; padding-right: 20px; }
+.portrait .clock { height: 64px; padding: 0 22px; }
+.portrait .time { font-size: 38px; }
+.portrait .hero { top: 134px; left: 40px; right: 40px; height: 130px; }
+.portrait .kicker { font-size: 20px; letter-spacing: 2px; }
+.portrait .title { font-size: 66px; letter-spacing: -2px; }
+.portrait .legend { display: none; }
+.portrait .board { left: 24px; right: 24px; top: 286px; bottom: 104px; }
+.portrait .row { padding: 0 12px; border-radius: 28px; }
+.portrait .c-class { width: 380px; padding-right: 18px; }
 .portrait .c-time { display: none; }
-.portrait .c-room { width: 170px; }
-.portrait .room { width: 170px; height: 80px; padding: 0 18px; }
+.portrait .c-room { width: 168px; }
+.portrait .room { width: 168px; padding: 0 18px; border-radius: 22px; }
 .portrait .room b { font-size: 34px; }
 .portrait .room b.long { font-size: 20px; }
-.portrait .pill { height: 60px; }
-.portrait .pill .lvl { width: 46px; height: 46px; line-height: 46px; font-size: 19px; margin-right: 12px; }
-.portrait .legend { display: none; }
+.portrait .pill { height: 60px; padding-right: 24px; }
+.portrait .pill .lvl { width: 44px; height: 44px; line-height: 44px; font-size: 18px; margin-right: 12px; }
 .portrait .pill .prog { font-size: 26px; }
 .portrait .subject { font-size: 25px; }
 .portrait .teacher { font-size: 19px; }
-.portrait .inline-hours { display: block; font-size: 20px; font-weight: 600; margin-top: 6px; }
+.portrait .inline-hours { display: block; font-size: 20px; font-weight: 700; margin-top: 6px; }
 .inline-hours { display: none; }
-.portrait .foot { padding: 0 36px; }
+.inline-hours .state { margin: 0 0 0 10px; font-size: 14px; padding: 4px 12px; vertical-align: 2px; }
+.portrait .foot { left: 24px; right: 24px; bottom: 24px; height: 64px; }
+.portrait .notice { font-size: 21px; }

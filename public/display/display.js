@@ -28,6 +28,8 @@
   var currentKey = null; // niveau + partie affichés (ex. "B2#1")
   var pageStart = 0;
   var lastOk = 0;
+  var isStale = false;
+  var GAP = 14; // espace entre les cartes (px du canevas)
 
   function now() { return Date.now() + clockOffset; }
   function local(ms) { return new Date(ms + tzOffset * 60000); }
@@ -46,7 +48,7 @@
     var w = window.innerWidth, h = window.innerHeight;
     var portrait = h > w * 1.1;
     var dark = data && data.settings.theme === 'dark';
-    stage.className = 'stage' + (portrait ? ' portrait' : '') + (dark ? ' dark' : '');
+    stage.className = 'stage' + (portrait ? ' portrait' : '') + (dark ? ' dark' : '') + (isStale ? ' stale-mode' : '');
     var sw = portrait ? 1080 : 1920, sh = portrait ? 1920 : 1080;
     var s = Math.min(w / sw, h / sh);
     var t = 'translate(' + (w - sw * s) / 2 + 'px,' + (h - sh * s) / 2 + 'px) scale(' + s + ')';
@@ -180,13 +182,13 @@
     var hours = hh(item.s) + ' à ' + hh(item.e);
     var lvl = g.levelLabel ? '<span class="lvl' + (g.levelLabel.length > 2 ? ' wide' : '') + '">' + esc(g.levelLabel) + '</span>' : '';
     var tag = g.program ? '<div class="pill" data-bg="' + esc(g.color) + '" data-ink="' + esc(g.ink || '#0a0006') + '">' + lvl + '<span class="prog">' + esc(g.program) + '</span></div>' : '';
-    var also = item.others > 0 ? '<div class="also">avec ' + item.others + ' autre' + (item.others > 1 ? 's' : '') + ' classe' + (item.others > 1 ? 's' : '') + '</div>' : '';
+    var also = item.others > 0 ? '<span class="also">+' + item.others + ' classe' + (item.others > 1 ? 's' : '') + '</span>' : '';
     var flag = c.modified && !c.cancelled ? '<span class="tag">Modifié</span>' : '';
-    return '<div class="row' + (c.cancelled ? ' cancelled' : '') + '" data-h="' + h + '">' +
+    return '<div class="row' + (c.cancelled ? ' cancelled' : '') + (item.live ? ' is-live' : '') + '" data-h="' + h + '">' +
       '<div class="c-class">' + tag + also + '</div>' +
       '<div class="c-course"><div class="subject">' + esc(c.subject) + flag + '</div>' +
         (c.teacher ? '<div class="teacher">' + esc(c.teacher) + '</div>' : '') +
-        '<div class="inline-hours">' + hours + '</div></div>' +
+        '<div class="inline-hours">' + hours + stateHtml(item, t) + '</div></div>' +
       '<div class="c-time"><div class="hours">' + hours + '</div>' + stateHtml(item, t) + '</div>' +
       '<div class="c-room">' + roomHtml(c) + '</div>' +
       '</div>';
@@ -216,7 +218,8 @@
     $('levels').innerHTML = levelsHtml();
     var cur = pages[page];
     $('level-title').textContent = cur ? LEVEL_NAMES[cur.level] : (data ? data.settings.campusName + ' Ynov Campus' : '');
-    $('part').textContent = cur && cur.parts > 1 ? 'Page ' + cur.part + ' sur ' + cur.parts : '';
+    $('part').textContent = cur && cur.parts > 1 ? 'Page ' + cur.part + ' / ' + cur.parts : '';
+    $('pager').className = 'pager' + (pages.length > 1 ? '' : ' solo');
     var legend = $('legend');
     legend.innerHTML = cur ? legendHtml(cur.rows) : '';
     applyStyles(legend);
@@ -227,7 +230,7 @@
         '<p>Retrouve ton emploi du temps complet sur HyperPlanning.</p></div>';
     } else {
       var t = now();
-      var h = Math.floor(board.clientHeight / per);
+      var h = Math.floor((board.clientHeight - GAP * (per - 1)) / per);
       var rows = pages[page].rows;
       var html = '';
       for (var r = 0; r < rows.length; r++) html += rowHtml(rows[r], t, h);
@@ -283,8 +286,9 @@
   function showSync(stale) {
     var el = $('sync');
     var ref = data && data.lastSuccessAt ? Date.parse(data.lastSuccessAt) : 0;
-    var isStale = stale || (lastOk && Date.now() - lastOk > 5 * POLL_MS);
+    isStale = !!(stale || (lastOk && Date.now() - lastOk > 5 * POLL_MS));
     el.className = 'sync' + (isStale ? ' stale' : '');
+    stage.className = stage.className.replace(/\s?stale-mode\b/, '') + (isStale ? ' stale-mode' : '');
     el.textContent = !ref ? '' : (isStale ? 'Hors ligne depuis ' : 'Mis à jour à ') + hm(ref);
   }
 

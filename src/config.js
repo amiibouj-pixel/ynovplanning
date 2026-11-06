@@ -3,7 +3,11 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
-const env = process.env;
+// Valeurs nettoyées : espaces et guillemets autour (fréquent quand on colle dans un tableau de bord)
+const env = {};
+for (const [k, v] of Object.entries(process.env)) {
+  env[k] = typeof v === 'string' ? v.trim().replace(/^(['"])(.*)\1$/, '$2').trim() : v;
+}
 
 function list(value) {
   return (value || '')
@@ -69,6 +73,9 @@ config.hpEnv = {
 
 if (!config.adminPasswordHash) {
   console.warn('[config] ADMIN_PASSWORD_HASH absent : la connexion admin est désactivée. Lancez `npm run hash-password`.');
+} else if (!/^\$2[aby]\$\d\d\$.{53}$/.test(config.adminPasswordHash)) {
+  console.warn('[config] ADMIN_PASSWORD_HASH ne ressemble pas à un hash bcrypt (' + config.adminPasswordHash.length + ' caractères au lieu de 60) : vérifier le copier-coller.');
 }
+console.log('[config] Admin : identifiant "' + config.adminUser + '", mot de passe ' + (config.adminPasswordHash ? 'configuré' : 'NON configuré'));
 
 module.exports = config;

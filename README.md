@@ -64,8 +64,17 @@ Le mot de passe du Service Web est chiffré (AES-256-GCM) et n'est jamais envoy�
 
 Pour une mise à jour : refaire le build et renvoyer les fichiers sans toucher au dossier `data/`.
 
-Sinon avec Docker : remplir le `.env` puis `docker compose up -d`. Il y a aussi une config `render.yaml`
-et des exemples nginx/systemd dans `deploy/`.
+## Mettre en ligne sur Render
+
+Le site tourne aussi sur Render (version Node). Dans Settings : branche `main`, build `npm ci --omit=dev`,
+start `npm start`, health check `/healthz`. Dans Environment : `NODE_ENV=production`, `NODE_VERSION=20`,
+`TZ=Europe/Paris`, `ADMIN_USER`, `ADMIN_PASSWORD_HASH`, `SESSION_SECRET`, `SECRETS_KEY`, `DISPLAY_KEY`
+(et `HP_API_KEY` quand on aura la clé). Tout est aussi dans `render.yaml`.
+
+Pas besoin de régler le proxy, l'appli détecte Render toute seule. En offre gratuite il n'y a pas de disque,
+donc les réglages faits dans l'admin sont perdus à chaque redéploiement (avec un disque : `DATA_DIR=/var/data`).
+
+Sinon avec Docker : remplir le `.env` puis `docker compose up -d`. Exemples nginx/systemd dans `deploy/`.
 
 ## Mettre l'écran dans Emity
 

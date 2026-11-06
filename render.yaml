@@ -1,31 +1,30 @@
-# Config Render : New > Blueprint > choisir ce dépôt
+# Config Render (New > Blueprint > choisir ce dépôt), ou à reprendre à la main dans Settings
 services:
   - type: web
-    name: cours-du-jour-ynov
+    name: planning-ynov
     runtime: node
-    plan: starter            # le disque persistant (réglages + clé API chiffrée) demande une offre payante
+    plan: free               # sans disque : les réglages de l'admin sont perdus à chaque redéploiement
     region: frankfurt
+    branch: main
     buildCommand: npm ci --omit=dev
-    startCommand: node server.js
+    startCommand: npm start
     healthCheckPath: /healthz
-    disk:
-      name: data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       - key: NODE_ENV
         value: production
-      - key: TRUST_PROXY
-        value: "1"
-      - key: DATA_DIR
-        value: /var/data
+      - key: NODE_VERSION
+        value: "20"
+      - key: TZ
+        value: Europe/Paris
+      - key: ADMIN_USER
+        value: peda-montpellier
+      - key: ADMIN_PASSWORD_HASH
+        sync: false          # npm run hash-password
       - key: SESSION_SECRET
         generateValue: true
       - key: SECRETS_KEY
         generateValue: true
       - key: DISPLAY_KEY
         generateValue: true
-      - key: ADMIN_USER
-        value: peda-montpellier
-      - key: ADMIN_PASSWORD_HASH
-        sync: false          # à coller dans le tableau de bord Render (npm run hash-password)
+      - key: HP_API_KEY
+        sync: false          # à remplir quand on aura la clé HyperPlanning

@@ -136,7 +136,12 @@
     $('#hpUserWrap').hidden = mode !== 'basic';
   }
   $('#hpAuthMode').addEventListener('change', updateAuthFields);
-  $('#hpFlavor').addEventListener('change', updateAuthFields);
+  $('#hpFlavor').addEventListener('change', function () {
+    var u = $('#hpBaseUrl').value.trim();
+    if (this.value === 'soap') $('#hpBaseUrl').value = toSoapUrl(u);
+    if (this.value === 'official') $('#hpBaseUrl').value = toRestUrl(u);
+    updateAuthFields();
+  });
 
   $('#hpTest').addEventListener('click', function () {
     readForm();
@@ -335,6 +340,9 @@
 
   // onglet Accueil : bouton Connecter
   var HP_CANDIDATES = ['https://hp26.ynov.com/MON/hpsw/api/v1/']; // Service Web REST HyperPlanning d'Ynov
+  // même serveur, version SOAP ou REST de l'adresse
+  function toSoapUrl(u) { return /\/hpsw\//i.test(u) ? u.replace(/\/hpsw\/.*$/i, '/hpsw/wsdl/RpcEncoded') : u; }
+  function toRestUrl(u) { return /\/hpsw\//i.test(u) ? u.replace(/\/hpsw\/.*$/i, '/hpsw/api/v1/') : u; }
   function renderQuick() {
     var hp = saved.hpApi;
     var connected = hp.enabled && hp.apiKeySet && !saved.demoMode;
@@ -357,14 +365,19 @@
     b.disabled = true;
     st.className = 'quick-state';
     st.textContent = 'Connexion à HyperPlanning…';
-    // Adresse non renseignée : on essaie les adresses habituelles du Service Web sur le serveur HyperPlanning d'Ynov
-    var candidates = hp.baseUrl ? [hp.baseUrl] : HP_CANDIDATES.slice();
+    // On essaie l'adresse enregistrée (ou celle d'Ynov) en REST, puis la même en SOAP si le REST ne répond pas
+    var base = hp.baseUrl || HP_CANDIDATES[0];
+    var candidates = [{ flavor: hp.flavor || 'official', url: base }];
+    var other = hp.flavor === 'soap' ? { flavor: 'official', url: toRestUrl(base) } : { flavor: 'soap', url: toSoapUrl(base) };
+    if (other.url !== base) candidates.push(other);
     function tryNext(lastErr) {
       if (!candidates.length) return Promise.reject(lastErr);
-      cfg.baseUrl = candidates.shift();
+      var c = candidates.shift();
+      cfg.baseUrl = c.url;
+      cfg.flavor = c.flavor;
       return api('POST', '/test-hpapi', cfg).catch(function (e) {
-        // Mauvaise clé : inutile d'essayer une autre adresse
-        if (/refus|incorrect/i.test(e.message)) throw e;
+        // Identifiants refusés (401/403) : inutile d'essayer en SOAP
+        if (/HTTP 40[13]/.test(e.message)) throw e;
         return tryNext(e);
       });
     }

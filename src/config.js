@@ -49,11 +49,10 @@ try {
 }
 
 if (!config.sessionSecret || config.sessionSecret.length < 32) {
-  if (config.isProd) {
-    throw new Error('SESSION_SECRET manquant ou trop court (32 caractères minimum).');
-  }
+  // On démarre quand même (sinon tout le site tombe pour une variable oubliée), avec un secret temporaire
   config.sessionSecret = require('crypto').randomBytes(48).toString('hex');
-  console.warn('[config] SESSION_SECRET absent : secret temporaire généré (sessions perdues au redémarrage).');
+  console.warn('[config] SESSION_SECRET absent ou trop court : secret temporaire généré (sessions admin perdues au redémarrage). '
+    + 'Ajouter SESSION_SECRET dans les variables d\'environnement.');
 }
 
 // Clé de chiffrement des secrets stockés (clé API HyperPlanning). À ne jamais changer une fois en production.

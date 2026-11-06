@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Back-office | Planning Ynov</title>
-  <link rel="stylesheet" href="/admin/static/admin.css?v=30">
+  <link rel="stylesheet" href="/admin/static/admin.css?v=31">
 </head>
 <body>
   <header class="topbar">
@@ -37,7 +37,7 @@
           <h2>1. Clé API HyperPlanning</h2>
           <p class="muted" id="quickHelp">Collez la clé, cliquez sur Connecter : les écrans affichent tous les cours de l'école.</p>
           <div class="quick-row">
-            <input id="quickKey" type="password" autocomplete="off" spellcheck="false" placeholder="Collez la clé API ici" aria-label="Clé API HyperPlanning">
+            <input id="quickKey" class="secret" type="text" name="hp-quick" autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false" placeholder="Collez la clé API ici" aria-label="Clé API HyperPlanning">
             <button class="btn btn-primary" id="quickConnect" type="button">Connecter</button>
           </div>
           <p class="quick-state" id="quickState"></p>
@@ -110,10 +110,10 @@
               <small class="hint">{date} = date du jour (AAAA-MM-JJ), {dateFR} = JJ/MM/AAAA</small>
             </label>
             <label id="hpUserWrap">Utilisateur du Service Web
-              <input id="hpUsername" maxlength="120" autocomplete="off">
+              <input id="hpUsername" name="hp-sw-user" maxlength="120" autocomplete="off" data-lpignore="true" data-1p-ignore>
             </label>
             <label>Mot de passe / clé API
-              <input id="hpApiKey" type="password" maxlength="1000" autocomplete="new-password" spellcheck="false">
+              <input id="hpApiKey" class="secret" type="text" name="hp-sw-key" maxlength="1000" autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false">
               <small class="hint" id="hpKeyState"></small>
             </label>
             <label class="adv">Envoi de la clé
@@ -231,6 +231,6 @@
     </div>
   </template>
 
-  <script src="/admin/static/admin.js?v=30"></script>
+  <script src="/admin/static/admin.js?v=31"></script>
 </body>
 </html>

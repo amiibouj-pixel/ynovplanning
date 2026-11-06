@@ -215,3 +215,6 @@ textarea { resize: vertical; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* champs secrets en texte masqué : Chrome ne les remplit pas avec le mot de passe de l'admin */
+.secret { -webkit-text-security: disc; text-security: disc; }

@@ -22,7 +22,8 @@ const config = {
   adminPasswordHash: env.ADMIN_PASSWORD_HASH || '',
   sessionSecret: env.SESSION_SECRET || '',
   adminAllowedIps: list(env.ADMIN_ALLOWED_IPS),
-  trustProxy: env.TRUST_PROXY || false,
+  // Render met toujours un proxy HTTPS devant l'appli (RENDER=true est fourni par Render)
+  trustProxy: env.TRUST_PROXY || (env.RENDER ? '1' : false),
   // Cookie admin "Secure" (HTTPS uniquement). Mettre COOKIE_SECURE=false pour un usage en HTTP sur le réseau local.
   cookieSecure: env.COOKIE_SECURE ? env.COOKIE_SECURE === 'true' : env.NODE_ENV === 'production',
 
@@ -36,6 +37,16 @@ const config = {
   // Dossier des réglages (sur un hébergeur : pointer vers un disque persistant)
   dataDir: env.DATA_DIR || path.join(__dirname, '..', 'data'),
 };
+
+// Dossier de données pas accessible en écriture (ex : DATA_DIR=/var/data sur Render sans disque) : on se rabat sur ./data
+try {
+  require('fs').mkdirSync(config.dataDir, { recursive: true });
+  require('fs').accessSync(config.dataDir, require('fs').constants.W_OK);
+} catch (e) {
+  const fallback = path.join(__dirname, '..', 'data');
+  console.warn('[config] ' + config.dataDir + ' inaccessible, réglages enregistrés dans ' + fallback + ' (perdus au redéploiement)');
+  config.dataDir = fallback;
+}
 
 if (!config.sessionSecret || config.sessionSecret.length < 32) {
   if (config.isProd) {

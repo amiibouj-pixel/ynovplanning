@@ -130,6 +130,15 @@ function sanitize(input, current) {
 
 let cache = null;
 
+// Si la clé HyperPlanning est fournie par variable, le site démarre directement connecté (sans passer par l'admin)
+if (config.hpApiKeyEnv) {
+  DEFAULTS.demoMode = false;
+  DEFAULTS.hpApi.enabled = true;
+  if (config.hpEnv.baseUrl) DEFAULTS.hpApi.baseUrl = config.hpEnv.baseUrl;
+  if (config.hpEnv.username) DEFAULTS.hpApi.username = config.hpEnv.username;
+  if (config.hpEnv.flavor) DEFAULTS.hpApi.flavor = config.hpEnv.flavor;
+}
+
 function load() {
   if (cache) return cache;
   try {

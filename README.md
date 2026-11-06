@@ -69,7 +69,10 @@ Pour une mise à jour : refaire le build et renvoyer les fichiers sans toucher a
 Le site tourne aussi sur Render (version Node). Dans Settings : branche `main`, build `npm ci --omit=dev`,
 start `npm start`, health check `/healthz`. Dans Environment : `NODE_ENV=production`, `NODE_VERSION=20`,
 `TZ=Europe/Paris`, `ADMIN_USER`, `ADMIN_PASSWORD_HASH`, `SESSION_SECRET`, `SECRETS_KEY`, `DISPLAY_KEY`
-(et `HP_API_KEY` quand on aura la clé). Tout est aussi dans `render.yaml`.
+Tout est aussi dans `render.yaml`.
+
+Quand on aura l'accès HyperPlanning, il suffit d'ajouter `HP_API_KEY` (mot de passe du Service Web), `HP_USER`,
+`HP_URL` et `HP_TYPE` (`official` ou `soap`) : le site quitte le mode démo tout seul, même après un redéploiement.
 
 Pas besoin de régler le proxy, l'appli détecte Render toute seule. En offre gratuite il n'y a pas de disque,
 donc les réglages faits dans l'admin sont perdus à chaque redéploiement (avec un disque : `DATA_DIR=/var/data`).

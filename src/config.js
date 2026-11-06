@@ -61,6 +61,12 @@ config.secretsKey = env.SECRETS_KEY || config.sessionSecret;
 if (!env.SECRETS_KEY) console.warn('[config] SECRETS_KEY absent : la clé API enregistrée sera illisible si SESSION_SECRET change.');
 // Optionnel : clé API fournie par variable d'environnement (prioritaire sur celle saisie dans l'admin)
 config.hpApiKeyEnv = env.HP_API_KEY || '';
+// Connexion HyperPlanning réglée par variables (utile sur Render gratuit : les réglages de l'admin sont perdus au redéploiement)
+config.hpEnv = {
+  baseUrl: env.HP_URL || '',
+  username: env.HP_USER || '',
+  flavor: ['official', 'soap', 'generic'].includes(env.HP_TYPE) ? env.HP_TYPE : '',
+};
 
 if (!config.adminPasswordHash) {
   console.warn('[config] ADMIN_PASSWORD_HASH absent : la connexion admin est désactivée. Lancez `npm run hash-password`.');

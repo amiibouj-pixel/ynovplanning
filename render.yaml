@@ -26,5 +26,12 @@ services:
         generateValue: true
       - key: DISPLAY_KEY
         generateValue: true
+      # Connexion HyperPlanning, à remplir quand on aura l'accès (le site passe alors en mode réel tout seul)
       - key: HP_API_KEY
-        sync: false          # à remplir quand on aura la clé HyperPlanning
+        sync: false          # mot de passe du Service Web
+      - key: HP_USER
+        sync: false          # utilisateur du Service Web
+      - key: HP_URL
+        sync: false          # ex : https://hp26.ynov.com/MON/hpsw/api/v1/
+      - key: HP_TYPE
+        value: official      # official (API REST) ou soap
